@@ -5,7 +5,7 @@
 set ignorecase true;
 
 create table technology (
-  id                        bigint not null,
+  id                        bigint not null auto_increment,
   name                      varchar(255) not null,
   constraint pk_technology primary key (id))
 ;

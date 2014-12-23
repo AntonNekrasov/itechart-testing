@@ -1,18 +1,14 @@
 package controllers.admin
 
 import play.api.mvc.{Controller, Action}
-import play.twirl.api.Html
 import views._
 
 /**
- * Manage an administration section
+ * Manage an administration home section
  */
 object Administration extends Controller {
 
-
-  //
-  //  Actions
-  //
+  // -- Actions
 
   /**
    * Handle default path requests, redirect to admin home
@@ -29,6 +25,9 @@ object Administration extends Controller {
    * @param filter Filter applied on language names
    */
   def techList(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
+    println(">>>>>>>>>>>>>>>>>>>>>")
+    println(models.Technology.queryAll().length)
+    println(">>>>>>>>>>>>>>>>>>>>>")
     Ok(html.administration.technology.list())
   }
 
