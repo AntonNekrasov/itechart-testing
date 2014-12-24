@@ -1,11 +1,29 @@
-#wrap {
+#rp-wrap {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -100px;
+    margin: 0 auto -40px;
 }
 
-#footer {
-    height: 80px;
+#rp-footer {
+    height: 10px;
     display: block;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+#rp-viewport {
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+}
+
+#rp-navbar {
+    float: left;
+}
+
+#rp-admin-content {
+    margin-left: 220px;
 }

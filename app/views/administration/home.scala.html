@@ -1,54 +1,57 @@
-@(selected: enums.AdminSection.Value)(body: Html)
+@(selected: enums.AdminSection.Value, title: String)(body: Html)
 
 @import enums.AdminSection
 
 @index {
 
-    <h1 class="ui header">H1</h1>
 
-    <div class="ui ordered vertical steps">
-        <a class="step @if(selected == AdminSection.Technology){ active }"
-                href="@controllers.admin.routes.Administration.techList()">
-            <div class="content">
-                <div class="title">
-                    Technologies
+    <h1 class="ui header">@title</h1>
+    <div class="ui red segment">
+        <div class="ui ordered vertical steps" id="rp-navbar">
+            <a class="step @if(selected == AdminSection.Technology){ active }"
+            href="@controllers.admin.routes.Administration.techList()">
+                <div class="content">
+                    <div class="title">
+                        Technologies
+                    </div>
                 </div>
-                <div class="description">Description</div>
-            </div>
-        </a>
-        <a class="step @if(selected == AdminSection.Test){ active }"
-                href="@controllers.admin.routes.Administration.testList()">
-            <div class="content">
-                <div class="title">
-                    Tests
+            </a>
+            <a class="step @if(selected == AdminSection.Test){ active }"
+                    href="@controllers.admin.routes.Administration.testList()">
+                <div class="content">
+                    <div class="title">
+                        Tests
+                    </div>
+                    @*<div class="description">Description</div>*@
                 </div>
-                <div class="description">Description</div>
-            </div>
-        </a>
+            </a>
 
-        <a class="step @if(selected == AdminSection.Quiz){ active }"
-                href="@controllers.admin.routes.Administration.quizList()">
-            <div class="content">
-                <div class="title"></div>
-                    Quizes
-                <div class="description">Description</div>
-            </div>
-        </a>
-
-        <a class="step @if(selected == AdminSection.Questionnaire){ active }"
-                href="@controllers.admin.routes.Administration.questList()">
-            <div class="content">
-                <div class="title">
-                    Quesionnaires
+            <a class="step @if(selected == AdminSection.Quiz){ active }"
+                    href="@controllers.admin.routes.Administration.quizList()">
+                <div class="content">
+                    <div class="title">
+                        Quizes
+                    </div>
+                    @*<div class="description">Description</div>*@
                 </div>
-                <div class="description">Description</div>
-            </div>
-        </a>
+            </a>
+
+            <a class="step @if(selected == AdminSection.Questionnaire){ active }"
+                    href="@controllers.admin.routes.Administration.questList()">
+                <div class="content">
+                    <div class="title">
+                        Quesionnaires
+                    </div>
+                    @*<div class="description">Description</div>*@
+                </div>
+            </a>
+
+        </div>
+
+        <div id="rp-admin-content">
+            @body
+        </div>
 
     </div>
-
-    <div class="ui hidden divider"></div>
-    @body
-
 
 }

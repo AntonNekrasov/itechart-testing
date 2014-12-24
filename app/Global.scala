@@ -16,7 +16,7 @@ object Global extends GlobalSettings{
    * @param request Current request
    */
   override def onRequestReceived(request: RequestHeader): (RequestHeader, Handler) = {
-    // TODO: add security
+    // TODO: edit security
     super.onRequestReceived(request)
   }
 

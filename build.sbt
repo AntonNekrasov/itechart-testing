@@ -8,7 +8,7 @@ scalaVersion := "2.11.1"
 
 libraryDependencies ++= Seq(
   jdbc,
-  "org.squeryl" % "squeryl_2.10" % "0.9.5-6",
+  "org.squeryl" % "squeryl_2.11" % "0.9.5-7",
   cache,
   ws
 )
