@@ -26,7 +26,11 @@ object Administration extends Controller {
   /**
    * Forwards to a admin technology section.
    */
-  def techList = Action { Technology }
+  def techList = Action {
+    println(">>>>>>>>>>>>>")
+    println(models.Technology.page(1, 1, ""))
+    println(">>>>>>>>>>>>>")
+    Technology }
 
   /**
    * Display the paginated list of quizes.
