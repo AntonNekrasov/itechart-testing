@@ -28,9 +28,11 @@ object Administration extends Controller {
    */
   def techList = Action {
     println(">>>>>>>>>>>>>")
-    println(models.Technology.page(1, 1, ""))
+    println(models.Technology.add(new models.Technology(Some(5), "Testing")))
     println(">>>>>>>>>>>>>")
-    Technology }
+
+    Technology
+  }
 
   /**
    * Display the paginated list of quizes.
