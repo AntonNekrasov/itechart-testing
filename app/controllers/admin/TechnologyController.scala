@@ -1,16 +1,17 @@
 package controllers.admin
 
+import controllers.BasicU
 import models.Technology
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
 import views.html
 
 /**
- * Manage an administration technology section
+ * Manages administration technology section
  */
-
-object TechnologyController extends Controller {
+object TechnologyController extends Controller with BasicU {
 
   /**
    * Describe the computer form (used in both edit and create screens).
@@ -31,8 +32,16 @@ object TechnologyController extends Controller {
    * @param orderBy Column to be sorted
    * @param filter Filter applied on language names
    */
-  def queryTech(page: Int, orderBy: Int, filter: String) = Action {
-    Ok("")
+  def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
+    val list = Technology.page(page, pageSize, orderBy, orderDir, filter)
+    val total = Technology.total(filter)
+    val result = Json.obj(
+      "data" -> list,
+      "total" -> total
+    )
+
+//    val result = reply[List[Technology]](list, FStatus.Success, total)
+    Ok(result).as(JSON)
   }
 
   /**

@@ -2,18 +2,28 @@ package models
 
 import org.squeryl.KeyedEntity
 import org.squeryl.PrimitiveTypeMode._
-import scala.util.{Try,Success,Failure}
+import scala.util.Try
 
 /**
  * Defines basic CRUD operations
  */
+trait BaseDAO[T<:Model] {
 
-trait BaseDAO[T <: Model] {
+  /**
+   * Returns the sample of particular entity. Used for defining schema table.
+   *
+   * @param id ID of the entity (optional) to be created
+   */
+  def createT(id: Long): T
 
-
+  /**
+   * Adds object to a database.
+   *
+   * @param obj the object to be stored
+   */
   def add(obj: T): Try[T] = {
     def aux = {
-      val tables = _tables(obj)
+      val tables = AppDB.findTablesFor(obj)
       inTransaction(
         tables.map(_.insert(obj))
       )
@@ -21,38 +31,54 @@ trait BaseDAO[T <: Model] {
     Try(aux.head)
   }
 
-  def put(obj: T): Unit = {
-    val tables = _tables(obj)
+  /**
+   * Updates object in database.
+   *
+   * @param obj the object to be updated
+   */
+  def put(obj: T): Try[Unit] = {
+    def aux = {
+      val tables = AppDB.findTablesFor(obj)
+      inTransaction(
+        tables.map(_.update(obj))
+      )
+    }
+    Try(aux.head)
+  }
+
+  /**
+   * Returns a single object.
+   *
+   * @param id ID of the object to be found
+   */
+  def getOne(id: Long): Option[T] = {
+    val table = AppDB.findTablesFor(createT(id)).head
     inTransaction(
-      tables.map(_.update(obj))
+      from(table)(a =>
+        where(a.id === Some(id) and a.deleted === false) select a
+      ).headOption
     )
   }
 
-  def get(id: Long): Option[T]
-
-  def rem(id: Long): Unit
-
-  private def _tables(obj: T) = AppDB.findTablesFor(obj)
-
+  /**
+   * Removes the object by ID.
+   *
+   * @param id ID of the object to be removed
+   */
+  def rem(id: Long): Unit = {
+    val table = AppDB.findTablesFor(createT(id)).head
+    inTransaction(
+      update(table) (a =>
+        where(a.id === Some(id))
+          set(a.deleted := true)
+      )
+    )
+  }
 }
 
-trait Model extends KeyedEntity[Option[Long]] {
+/**
+ * Base class for all the entities
+ */
+abstract class Model(id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
   val deleted: Boolean = false
-}
-
-import scala.io.Source
-
-
-object Test extends App {
-
-  def readTextFile(filename: String): Try[List[String]] = {
-    Try(Source.fromFile(filename).getLines.toList)
-  }
-
-  val filename = "/etc/passwd"
-  readTextFile(filename) match {
-    case Success(lines) => lines.foreach(println)
-    case Failure(f) => println(f)
-  }
-
 }

@@ -2,7 +2,7 @@
 
 # --- !Ups
 
-INSERT INTO technology (name) VALUES('one');
+INSERT INTO technology (id, name) VALUES(3000, 'one');
 
 # --- !Downs
 
