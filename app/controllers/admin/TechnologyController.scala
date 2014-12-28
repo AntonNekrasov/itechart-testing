@@ -1,6 +1,5 @@
 package controllers.admin
 
-import controllers.BasicU
 import models.Technology
 import play.api.data.Form
 import play.api.data.Forms._
@@ -11,7 +10,7 @@ import views.html
 /**
  * Manages administration technology section
  */
-object TechnologyController extends Controller with BasicU {
+object TechnologyController extends Controller {
 
   /**
    * Describe the computer form (used in both edit and create screens).

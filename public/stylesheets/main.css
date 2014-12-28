@@ -21,9 +21,30 @@
 }
 
 #rp-navbar {
+    display: inline-block;
     float: left;
 }
 
-#rp-admin-content {
-    margin-left: 220px;
+#rp-navbar .step {
+    width: 200px;
 }
+
+#rp-admin-content {
+    margin-left: 30px;
+}
+
+#rp-navbar .active,
+#rp-navbar .active::after {
+    background: #FF3333;
+}
+
+#rp-navbar .active:hover,
+#rp-navbar .active:hover::after {
+    background: #F20000;
+}
+
+#rp-navbar .active .title,
+#rp-navbar .active::before {
+    color: white;
+}
+
