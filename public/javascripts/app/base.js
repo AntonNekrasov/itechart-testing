@@ -18,9 +18,10 @@ rpApp.Service = (function () {
             data: data
         }).done(function(s) {
             if(success) {
-                params = success.parameters;
-                if(s) params.reply = s;
-                success.fn.apply(success.scope, [params]);
+                console.log(s)
+                //params = success.parameters;
+                //if(s) params.reply = s;
+                //success.fn.apply(success.scope, [params]);
             }
         }).fail(function(e) {
             if(error) {
