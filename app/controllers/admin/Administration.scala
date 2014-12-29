@@ -24,35 +24,23 @@ object Administration extends Controller {
   def home = Action { Technology }
 
   /**
-   * Forwards to a admin technology section.
+   * Forwards to admin technology section
    */
   def techList = Action { Technology }
 
   /**
-   * Display the paginated list of quizes.
-   *
-   * @param page Current page number (starts from 0)
-   * @param orderBy Column to be sorted
-   * @param filter Filter applied on quiz names
+   * Forwards to admin quiz section
    */
-  def quizList(page: Int, orderBy: Int, filter: String) = Action { Quiz }
+  def quizList = Action { Quiz }
 
   /**
-   * Display the paginated list of questionnaires.
-   *
-   * @param page Current page number (starts from 0)
-   * @param orderBy Column to be sorted
-   * @param filter Filter applied on questionnaire names
+   * Forwards to admin questionnaires section
    */
-  def questList(page: Int, orderBy: Int, filter: String) = Action { Questionnaire }
+  def questList = Action { Questionnaire }
 
   /**
-   * Display the paginated list of questionnaires.
-   *
-   * @param page Current page number (starts from 0)
-   * @param orderBy Column to be sorted
-   * @param filter Filter applied on questionnaire names
+   * Forwards to admin tests section
    */
-  def testList(page: Int, orderBy: Int, filter: String) = Action { Test }
+  def testList = Action { Test }
 
 }

@@ -1,3 +1,5 @@
+/* -- Viewport */
+
 #rp-wrap {
     min-height: 100%;
     height: auto !important;
@@ -14,23 +16,28 @@
 
 #rp-viewport {
     position: absolute;
-    top: 20px;
-    left: 5px;
-    right: 5px;
+    top: 10px;
+    left: 50px;
+    right: 50px;
     bottom: 5px;
 }
 
-#rp-navbar {
-    display: inline-block;
-    float: left;
+/* -- Admin navigation bar */
+
+@media (max-width: 700px) {
+    #rp-navbar .step {
+        width: 100px;
+    }
 }
 
-#rp-navbar .step {
-    width: 200px;
-}
+@media (min-width: 701px) {
+    #rp-navbar .step {
+        width: 200px;
+    }
 
-#rp-admin-content {
-    margin-left: 30px;
+    #rp-navbar {
+        width: 250px;
+    }
 }
 
 #rp-navbar .active,
@@ -48,3 +55,12 @@
     color: white;
 }
 
+/* -- Admin panel */
+#rp-admin-panel .trash {
+    display: none;
+    float: right
+}
+
+#rp-admin-panel .item:hover .trash {
+    display: table-cell;
+}
