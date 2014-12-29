@@ -54,7 +54,6 @@ object Technology extends BaseDAO[Technology] {
 
     val lFilter = filter.toLowerCase
     val offSet = (page - 1) * pageSize
-    println("offSet = " + offSet)
 
     inTransaction(
       from(AppDB.technology)(a =>

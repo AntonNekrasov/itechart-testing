@@ -1,5 +1,5 @@
 /* globals rpApp */
-rpApp.admin = {}
+rpApp.admin = {};
 
 rpApp.admin.controller = function() {
     var self = this,
@@ -11,42 +11,49 @@ rpApp.admin.controller = function() {
                         var $elt = $(this),
                             url = $elt.attr("data-url"),
                             success = new rpApp.Callback(function(params){
-                                //reply = params.reply;
-                                //if(reply.status === "SUCCESS") {
-                                //    books([]);
-                                //    totalPages(reply.data.totalPages);
-                                //    for(var i = 0, lth = reply.data.list.length; i < lth; i++) {
-                                //        var book = reply.data.list[i];
-                                //        addBook(book.id, book.name, book.price);
-                                //    }
-                                //}
-                                alert("success");
+                                var reply = params.reply,
+                                    entities = reply.data["list"],
+                                    nodes = "";
+                                if(reply.status === "Success") {
+                                    $elt.empty();
+                                    for(var n in entities) {
+                                        var e = entities[n];
+                                        nodes += node(e.name, "description"); //TODO: update with real description;
+                                    }
+                                    console.log(nodes);
+                                    $elt.html(nodes);
+                                }
                             }, self, {}),
                             error = new rpApp.Callback(function(params){
-                                    //reply = params.reply;
-                                    //var message = reply.responseText ? reply.responseText : reply.statusText;
-                                    //alert(message);
-                                    alert("error");
+                                    var reply = params.reply;
+                                    var message = reply.responseText ? reply.responseText : reply.statusText;
+                                    //TODO: update;
+                                    alert(message);
+
                                 }, self, {}
                             );
-
-
-
-                        $elt.empty();
-
 
                         service.send(
                             url,
                             "GET",
                             {},
-                            function() {success},
-                            function() {error}
+                            success,
+                            error
 
                         )
                     });
-                    //var url = me.attr("data-url");
+                };
 
-                }
+            function node(title, description) {
+                return "<div class=\"item\">" +
+                    "<i class=\"large trash icon doubling\"></i>" +
+                    "<div class=\"content\">" +
+                        "<div class=\"header\">" + title + "</div>" +
+                        "<div>" + description + "</div>" +
+                    "</div>" +
+                "</div>"
+            }
+
             return {
                 query: query
             }

@@ -1,5 +1,6 @@
 package controllers.admin
 
+import enums.ResponseStatus
 import models.Technology
 import play.api.data.Form
 import play.api.data.Forms._
@@ -34,12 +35,13 @@ object TechnologyController extends Controller {
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
     val list = Technology.page(page, pageSize, orderBy, orderDir, filter)
     val total = Technology.total(filter)
+
+    //TODO: implement counting total pages
     val result = Json.obj(
-      "data" -> list,
-      "total" -> total
+      "data" -> Json.obj("list" -> list, "total" -> total),
+      "status" -> ResponseStatus.Success.toString
     )
 
-//    val result = reply[List[Technology]](list, FStatus.Success, total)
     Ok(result).as(JSON)
   }
 
