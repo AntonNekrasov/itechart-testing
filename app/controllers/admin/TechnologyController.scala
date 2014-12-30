@@ -53,11 +53,7 @@ object TechnologyController extends Controller {
    * @param tech Technology to edit. None is returned for newly created entities
    */
   def editPage(tech: Option[Long]) = Action {
-    val entity: Option[Technology] = tech.flatMap(id => Technology.getOne(id))
-    println(">>>>>>>>>>>>>>>>>>>")
-    println(entity)
-    println(">>>>>>>>>>>>>>>>>>>")
-    Ok(html.administration.technology.edit(entity))
+    Ok(html.administration.technology.edit(tech.flatMap(id => Technology.getOne(id))))
   }
 
   /**

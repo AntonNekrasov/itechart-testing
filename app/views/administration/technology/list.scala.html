@@ -4,30 +4,22 @@
 @home(AdminSection.Technology, "Technology") {
     <div id="admin-panel-wrapper">
 
+        <div class="hidden" id="settings"
+            data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
+            data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
+            data-edit-url="@controllers.admin.routes.TechnologyController.editPage()">
+        </div>
+
         <div class="ui fluid icon input loading">
             <input type="text" placeholder="Search a very wide input...">
             <i class="search icon"></i>
         </div>
 
-        <div class="ui black button"
-            data-action="editPage"
-            data-url="@controllers.admin.routes.TechnologyController.editPage()">
+        <div class="ui black button" data-action="editPage">
             Add New
         </div>
 
-        <div class="ui selection list"
-            data-action="list"
-            data-url="@controllers.admin.routes.TechnologyController.queryTech()">
-
-            @*<div class="item">*@
-                @*<i class="large trash icon"></i>*@
-                @*<div class="content">*@
-                    @*<div class="header">Helen</div>*@
-                    @*<div>Description</div>*@
-                @*</div>*@
-            @*</div>*@
-
-        </div>
+        <div class="ui selection list" data-action="list"></div>
 
     </div>
 }
