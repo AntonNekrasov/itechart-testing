@@ -13,7 +13,7 @@ GET           /admin/questionnarie                controllers.admin.Administrati
 GET           /admin/tests                        controllers.admin.Administration.testList
 
 # Admin technology section
-GET           /admin/technology/add               controllers.admin.TechnologyController.addTech(id: Option[Long] ?= None )
+GET           /admin/technology/edit              controllers.admin.TechnologyController.editPage(id: Option[Long] ?= None )
 GET           /admin/technology/queryTech         controllers.admin.TechnologyController.queryTech(p: Int ?= 1, s: Int ?= 10, ob: String ?= "", od: Int ?= 1, f: String ?= "")
 POST          /admin/technology/create            controllers.admin.TechnologyController.createTech
 PUT           /admin/technology/update/:id        controllers.admin.TechnologyController.updateTech(id: Long)

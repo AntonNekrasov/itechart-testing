@@ -4,10 +4,25 @@ rpApp.admin = {};
 rpApp.admin.controller = function() {
     var self = this,
         service = rpApp.Service,
-        list = (function () {
-            var me = $("[data-action='list']"),
-                query = function() {
-                    me.each(function() {
+        /**
+         * Provides the main handlers for view elements.
+         */
+        crud = (function () {
+            var $eltList = $("[data-action=\"list\"]"),
+
+                // -- Public methods
+
+                /**
+                 * Displays the paginated list of entities.
+                 *
+                 * @param page Current page number (starts from 0)
+                 * @param pageSize Page size
+                 * @param order Column to be sorted
+                 * @param orderDirection Order direction
+                 * @param filter Filter applied on entities
+                 */
+                query = function(page, pageSize, order, orderDirection, filter) {
+                    return $eltList.each(function() {
                         var $elt = $(this),
                             url = $elt.attr("data-url"),
                             success = new rpApp.Callback(function(params){
@@ -17,8 +32,10 @@ rpApp.admin.controller = function() {
                                 if(reply.status === "Success") {
                                     $elt.empty();
                                     for(var n in entities) {
-                                        var e = entities[n];
-                                        nodes += node(e.name, "description"); //TODO: update with real description;
+                                        if (entities.hasOwnProperty(n)) {
+                                            var e = entities[n];
+                                            nodes += node(e.id, e.name, "description"); //TODO: update with real description;
+                                        }
                                     }
                                     console.log(nodes);
                                     $elt.html(nodes);
@@ -42,10 +59,25 @@ rpApp.admin.controller = function() {
 
                         )
                     });
+                },
+
+                /**
+                 * Redirects to an entity edit page.
+                 *
+                 * @param page Current page number (starts from 0)
+                 * @param pageSize Page size
+                 * @param order Column to be sorted
+                 * @param orderDirection Order direction
+                 * @param filter Filter applied on language names
+                 */
+                editPage = function(url, id) {
+
                 };
 
-            function node(title, description) {
-                return "<div class=\"item\">" +
+            // -- Private functions
+
+            function node(id, title, description) {
+                return "<div class=\"item\" data-action=\"editPage\" data-id=\"" + id + "\">" +
                     "<i class=\"large trash icon doubling\"></i>" +
                     "<div class=\"content\">" +
                         "<div class=\"header\">" + title + "</div>" +
@@ -54,12 +86,20 @@ rpApp.admin.controller = function() {
                 "</div>"
             }
 
+            // -- Event handlers
+
+            $("#rp-admin-panel").on("click", "[data-action=\"editPage\"]", function() {
+                console.log(this);
+            });
+
             return {
-                query: query
+                query: query,
+                editPage: editPage
             }
         })();
 
-    list.query();
+
+    crud.query();
 
 
 };

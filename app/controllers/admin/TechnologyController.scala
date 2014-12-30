@@ -14,7 +14,7 @@ import views.html
 object TechnologyController extends Controller {
 
   /**
-   * Describe the computer form (used in both edit and create screens).
+   * Describes the technology form
    */
   val techForm = Form(
     mapping(
@@ -29,7 +29,9 @@ object TechnologyController extends Controller {
    * Displays the paginated list of programming technologies.
    *
    * @param page Current page number (starts from 0)
+   * @param pageSize Page size
    * @param orderBy Column to be sorted
+   * @param orderDir Order direction
    * @param filter Filter applied on language names
    */
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
@@ -46,12 +48,16 @@ object TechnologyController extends Controller {
   }
 
   /**
-   * Displays technology create/edit page.
+   * Displays technology create/edit page
    *
    * @param tech Technology to edit. None is returned for newly created entities
    */
-  def addTech(tech: Option[Long]) = Action {
-    Ok(html.administration.technology.edit(None))
+  def editPage(tech: Option[Long]) = Action {
+    val entity: Option[Technology] = tech.flatMap(id => Technology.getOne(id))
+    println(">>>>>>>>>>>>>>>>>>>")
+    println(entity)
+    println(">>>>>>>>>>>>>>>>>>>")
+    Ok(html.administration.technology.edit(entity))
   }
 
   /**
