@@ -82,7 +82,6 @@ rpApp.admin.controller = function() {
                 var $this = $(this),
                     id = $this.attr("data-id"),
                     url = $settings.attr("data-edit-url");
-                
                 crud.editPage(url, id);
             }).on("click", "[data-action=\"delete\"]", function(e) {
                 e.preventDefault();
