@@ -57,10 +57,20 @@
 
 /* -- Admin panel */
 #rp-admin-panel .trash {
-    display: none;
-    float: right
+    /*display: none;*/
+    float: right;
+    visibility: hidden;
 }
 
-#rp-admin-panel .item:hover .trash {
-    display: table-cell;
+#rp-admin-panel .table tr {
+    cursor: pointer;
+}
+
+#rp-admin-panel .table th {
+    border-right: none;
+    border-left: none;
+}
+
+#rp-admin-panel .table tr:hover .trash {
+    visibility: visible;
 }

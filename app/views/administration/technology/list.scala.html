@@ -7,7 +7,8 @@
         <div class="hidden" id="settings"
             data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
             data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
-            data-edit-url="@controllers.admin.routes.TechnologyController.editPage()">
+            data-edit-url="@controllers.admin.routes.TechnologyController.editPage()"
+            data-cells="name//Name, description//Description">
         </div>
 
         <div class="ui fluid icon input loading">
@@ -19,7 +20,38 @@
             Add New
         </div>
 
-        <div class="ui selection list" data-action="list"></div>
-
+        <table class="ui sortable table" data-action="header">
+            <thead>
+                <tr>
+                    <th class="sorted descending">Name</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-action="list">
+                <tr data-action="editPage" data-id="3000">
+                    <td>Name</td>
+                    <td>Description</td>
+                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
+                </tr>
+                <tr>
+                    <td>Jamie</td>
+                    <td>Approved</td>
+                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
+                </tr>
+                <tr>
+                    <td>Jill</td>
+                    <td>Denied</td>
+                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>3 People</th>
+                    <th>2 Approved</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 }
