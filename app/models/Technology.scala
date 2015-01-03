@@ -8,12 +8,13 @@ import play.api.libs.json.{JsObject, Json, Writes}
  * Testing technology
  */
 case class Technology(id: Option[Long],
-                      name: String) extends Model(id)
+                      name: String,
+                      description: Option[String]) extends Model(id)
 
 object Technology extends BaseDAO[Technology] {
 
-  def apply(): Technology = new Technology(None, "")
-  def apply(id: Option[Long]  = None) = new Technology(id, "")
+  def apply(): Technology = new Technology(None, "", None)
+  def apply(id: Option[Long]  = None) = new Technology(id, "", None)
 
   // -- Supplementary functions
 
@@ -30,7 +31,8 @@ object Technology extends BaseDAO[Technology] {
   implicit val jsonWrites = new Writes[Technology] {
     override def writes(o: Technology): JsObject = Json.obj(
       "id" -> o.id.getOrElse("").toString,
-      "name" -> o.name
+      "name" -> o.name,
+      "description" -> o.description
     )
   }
 
@@ -49,10 +51,11 @@ object Technology extends BaseDAO[Technology] {
 
     def getOrderBy(cmp: Technology): ExpressionNode = orderBy match {
       case "name" => if(orderDir == 0) cmp.name.desc else cmp.name.asc
+      case "description" => if(orderDir == 0) cmp.description.desc else cmp.description.asc
       case _ => if(orderDir == 0) cmp.name.desc else cmp.name.asc
     }
 
-    val lFilter = filter.toLowerCase
+    val lFilter = "%" + filter.toLowerCase + "%"
     val offSet = (page - 1) * pageSize
 
     inTransaction(

@@ -19,7 +19,8 @@ object TechnologyController extends Controller {
   val techForm = Form(
     mapping(
       "id" -> ignored(None:Option[Long]),
-      "name" -> nonEmptyText
+      "name" -> nonEmptyText,
+      "description" -> optional(text)
     )(Technology.apply)(Technology.unapply)
   )
 

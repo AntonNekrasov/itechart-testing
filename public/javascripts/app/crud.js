@@ -20,12 +20,16 @@ rpApp.Crud = function ($settings) {
          * @param order Column to be sorted
          * @param orderDirection Order direction
          * @param filter Filter applied on entities
+         * @param callback Callback function, to be implemented, after server response is returned
          */
-        query = function(page, pageSize, order, orderDirection, filter) {
+        query = function(page, pageSize, order, orderDirection, filter, callback) {
+
+            if(!page || !pageSize) throw new Error("page or page size are undefined!")
+
             var $eltList = $("[data-action=\"list\"]");
             return $eltList.each(function() {
                 var $elt = $(this),
-                    url = $settings.attr("data-list-url"),
+                    url = $settings.attr("data-list-url") + "?p=" + page + "&s=" + pageSize,
                     success = new rpApp.Callback(function(params){
                         var reply = params.reply,
                             entities = reply.data["list"],
@@ -47,10 +51,13 @@ rpApp.Crud = function ($settings) {
                             //TODO: update;
                             alert(message);
 
-                        }, self, {}
-                    );
+                        }, self, {});
 
-                service.send(url, "GET", {}, success, error)
+                if(order) url +="&ob=" + order;
+                if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
+                if(filter) url += "&f=" + filter;
+
+                service.send(url, "GET", {}, success, error, callback)
             });
         },
 
@@ -74,7 +81,7 @@ rpApp.Crud = function ($settings) {
             var ctt = cells[i];
             content += "<td>" + (entity[ctt.name] || " ") + "</td>";
         }
-        content += "<td><i class=\"large trash icon doubling\" data-action=\"delete\"></i></td></tr>"
+        content += "<td><i class=\"large trash icon doubling\" data-action=\"delete\"></i></td></tr>";
 
         return content;
     }
@@ -118,7 +125,23 @@ rpApp.Crud = function ($settings) {
                 content += "<th data-map=\"" + ctt["name"] + "\">" + ctt["title"] + "</th>"
             }
 
+            /*adding table body*/
             content += "<th></th><tbody data-action=\"list\"></tbody>";
+            /*adding footer*/
+            content += "<tfoot><tr><th colspan=\"" + (cells.length + 1) + "\">" +
+                "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
+                "<div class=\"ui compact selection dropdown\">" +
+                    "<i class=\"dropdown icon\"></i>" +
+                    "<div class=\"text\">1</div>" +
+                    "<div class=\"menu\">" +
+                        "<div class=\"item\">A</div>" +
+                        "<div class=\"item\">B</div>" +
+                        "<div class=\"item\">C</div>" +
+                    "</div>" +
+                "</div>" +
+                "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
+            "</th></tr></tfoot>";
+
             $table.html(content);
         });
     })();

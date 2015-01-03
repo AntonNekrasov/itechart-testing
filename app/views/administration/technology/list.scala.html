@@ -11,8 +11,8 @@
             data-cells="name//Name, description//Description">
         </div>
 
-        <div class="ui fluid icon input loading">
-            <input type="text" placeholder="Search a very wide input...">
+        <div class="ui fluid icon input">
+            <input type="text" data-action="search" placeholder="Search a very wide input...">
             <i class="search icon"></i>
         </div>
 
@@ -20,38 +20,7 @@
             Add New
         </div>
 
-        <table class="ui sortable table" data-action="header">
-            <thead>
-                <tr>
-                    <th class="sorted descending">Name</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody data-action="list">
-                <tr data-action="editPage" data-id="3000">
-                    <td>Name</td>
-                    <td>Description</td>
-                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
-                </tr>
-                <tr>
-                    <td>Jamie</td>
-                    <td>Approved</td>
-                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
-                </tr>
-                <tr>
-                    <td>Jill</td>
-                    <td>Denied</td>
-                    <td><i class="large trash icon doubling" data-action="delete"></i></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>3 People</th>
-                    <th>2 Approved</th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+        <table class="ui sortable table" data-action="header"></table>
     </div>
+
 }
