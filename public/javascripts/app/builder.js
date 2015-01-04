@@ -5,7 +5,7 @@
  * Implements read/search/sort/delete methods
  * Defines the table structure
  */
-rpApp.Crud = function ($settings) {
+rpApp.builder = function ($settings) {
     var self = this,
         service = rpApp.Service,
         cells = getCells(),
@@ -46,12 +46,11 @@ rpApp.Crud = function ($settings) {
                         }
                     }, self, {}),
                     error = new rpApp.Callback(function(params){
-                            var reply = params.reply;
-                            var message = reply.responseText ? reply.responseText : reply.statusText;
-                            //TODO: update;
-                            alert(message);
-
-                        }, self, {});
+                        var reply = params.reply;
+                        var message = reply.responseText ? reply.responseText : reply.statusText;
+                        //TODO: update;
+                        alert(message);
+                    }, self, {});
 
                 if(order) url +="&ob=" + order;
                 if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
@@ -64,14 +63,29 @@ rpApp.Crud = function ($settings) {
          * Removes selected entity.
          */
         remove = function(id, name, callback) {
-            var url = $settings.attr("data-delete-url"),
+            var url = $settings.attr("data-delete-url") + id,
                 $modal = $("#rp-confirmation");
 
             $modal.find(".header").html("Delete \"" + name + "\"");
             $modal.find(".description").html("Are you sure you want to delete \"" + name + "\" record?");
             $modal.modal("show");
+
             $modal.find(".rp-confirm").off("click").on("click", function() {
 
+                var success = new rpApp.Callback(function(params){
+                    var reply = params.reply;
+                    if(reply.status === "Success") {
+                        $modal.modal("hide");
+                    }
+                }, self, {}),
+                    error = new rpApp.Callback(function(params){
+                        var reply = params.reply;
+                        var message = reply.responseText ? reply.responseText : reply.statusText;
+                        //TODO: update;
+                        alert(message);
+                }, self, {});
+
+                service.send(url, "DELETE", {}, success, error, callback);
             });
 
         },
@@ -86,6 +100,7 @@ rpApp.Crud = function ($settings) {
         };
 
     // -- Private functions
+
     /**
      * Creates table row.
      */
@@ -152,20 +167,6 @@ rpApp.Crud = function ($settings) {
                 "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
                 "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
             "</th></tr></tfoot>";
-
-            //content += "<tfoot><tr><th colspan=\"" + (cells.length + 1) + "\">" +
-            //    "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
-            //    "<div class=\"ui compact selection dropdown\">" +
-            //        "<i class=\"dropdown icon\"></i>" +
-            //        "<div class=\"text\">1</div>" +
-            //        "<div class=\"menu\">" +
-            //            "<div class=\"item\">A</div>" +
-            //            "<div class=\"item\">B</div>" +
-            //            "<div class=\"item\">C</div>" +
-            //        "</div>" +
-            //    "</div>" +
-            //    "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
-            //"</th></tr></tfoot>";
 
             $table.html(content);
         });

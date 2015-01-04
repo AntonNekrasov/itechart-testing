@@ -29,7 +29,7 @@ rpApp.admin = {};
 
 rpApp.admin.controller = function() {
     var $settings = $("#settings").first(),
-        crud = rpApp.Crud($settings),
+        builder = rpApp.builder($settings),
         ASCENDING = "ascending",
         DESCENDING = "descending",
         DESC = 0,
@@ -64,7 +64,7 @@ rpApp.admin.controller = function() {
                 $this.addClass((asc ? DESCENDING : ASCENDING));
             }, self, {});
 
-        crud.query(page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
+        builder.query(page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
     }
 
     /**
@@ -82,7 +82,7 @@ rpApp.admin.controller = function() {
                     $loading.removeClass("loading");
                 }, self, {});
 
-            crud.query(1, pageSize, orderBy, orderDirection, $this.val(), callback);
+            builder.query(1, pageSize, orderBy, orderDirection, $this.val(), callback);
         }, 1000);
     }
 
@@ -96,9 +96,9 @@ rpApp.admin.controller = function() {
         e.stopPropagation();
 
         var $this = $(this),
-            $parent = $this.parent(),
+            $parent = $this.parents("tr"),
             id = $parent.attr("data-id"),
-            callback = new rpApp.Callback(function(){
+            callback = new rpApp.Callback(function() {
                 var situation = sit(),
                     orderBy = situation.order.by,
                     orderDirection = situation.order.direction,
@@ -106,7 +106,7 @@ rpApp.admin.controller = function() {
                 crud.query(page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
 
-        crud.remove(id, "name", "description", callback);
+        builder.remove(id, "name", callback);
     }
 
     /**
@@ -116,7 +116,7 @@ rpApp.admin.controller = function() {
         var $this = $(this),
             id = $this.attr("data-id"),
             url = $settings.attr("data-edit-url");
-        crud.editPage(url, id);
+        builder.editPage(url, id);
     }
 
     // -- Private functions
@@ -140,12 +140,8 @@ rpApp.admin.controller = function() {
         return situation;
     }
 
-
-
     // -- Init section
 
-
-
-    crud.query(page, pageSize);
+    builder.query(page, pageSize);
 };
 

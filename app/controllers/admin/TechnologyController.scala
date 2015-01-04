@@ -86,7 +86,8 @@ object TechnologyController extends Controller {
    * Removes an existing technology
    */
   def removeTech(id: Long) = Action {
-    Ok("")
+    Technology.rem(id)
+    Ok(Json.obj("status" -> ResponseStatus.Success.toString))
   }
 
 }
