@@ -24,7 +24,7 @@ rpApp.Crud = function ($settings) {
          */
         query = function(page, pageSize, order, orderDirection, filter, callback) {
 
-            if(!page || !pageSize) throw new Error("page or page size are undefined!")
+            if(!page || !pageSize) throw new Error("page or page size are undefined!");
 
             var $eltList = $("[data-action=\"list\"]");
             return $eltList.each(function() {
@@ -60,7 +60,21 @@ rpApp.Crud = function ($settings) {
                 service.send(url, "GET", {}, success, error, callback)
             });
         },
+        /**
+         * Removes selected entity.
+         */
+        remove = function(id, name, callback) {
+            var url = $settings.attr("data-delete-url"),
+                $modal = $("#rp-confirmation");
 
+            $modal.find(".header").html("Delete \"" + name + "\"");
+            $modal.find(".description").html("Are you sure you want to delete \"" + name + "\" record?");
+            $modal.modal("show");
+            $modal.find(".rp-confirm").off("click").on("click", function() {
+
+            });
+
+        },
         /**
          * Redirects to an entity edit page.
          *
@@ -76,7 +90,8 @@ rpApp.Crud = function ($settings) {
      * Creates table row.
      */
     function row(entity) {
-        var content = "<tr data-action=\"editPage\" data-id=\"" + entity.id + "\">";
+        var signature = $settings.attr("data-entity-signature"),
+            content = "<tr data-action=\"editPage\" data-id=\"" + entity.id + "\" data-entity=\"" + entity[signature] + "\">";
         for(var i = 0, lth = cells.length; i < lth; i++) {
             var ctt = cells[i];
             content += "<td>" + (entity[ctt.name] || " ") + "</td>";
@@ -127,20 +142,30 @@ rpApp.Crud = function ($settings) {
 
             /*adding table body*/
             content += "<th></th><tbody data-action=\"list\"></tbody>";
-            /*adding footer*/
+            /*adding footer TODO: rework */
             content += "<tfoot><tr><th colspan=\"" + (cells.length + 1) + "\">" +
-                "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
-                "<div class=\"ui compact selection dropdown\">" +
-                    "<i class=\"dropdown icon\"></i>" +
-                    "<div class=\"text\">1</div>" +
-                    "<div class=\"menu\">" +
-                        "<div class=\"item\">A</div>" +
-                        "<div class=\"item\">B</div>" +
-                        "<div class=\"item\">C</div>" +
-                    "</div>" +
+                "Page&nbsp;" +
+                "<div class=\"ui transparent input\">" +
+                    "<input type=\"text\" placeholder=\"\">" +
                 "</div>" +
+                "&nbsp;of 1000" +
+                "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
                 "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
             "</th></tr></tfoot>";
+
+            //content += "<tfoot><tr><th colspan=\"" + (cells.length + 1) + "\">" +
+            //    "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
+            //    "<div class=\"ui compact selection dropdown\">" +
+            //        "<i class=\"dropdown icon\"></i>" +
+            //        "<div class=\"text\">1</div>" +
+            //        "<div class=\"menu\">" +
+            //            "<div class=\"item\">A</div>" +
+            //            "<div class=\"item\">B</div>" +
+            //            "<div class=\"item\">C</div>" +
+            //        "</div>" +
+            //    "</div>" +
+            //    "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
+            //"</th></tr></tfoot>";
 
             $table.html(content);
         });
@@ -148,6 +173,7 @@ rpApp.Crud = function ($settings) {
 
     return {
         query: query,
+        remove: remove,
         editPage: editPage
     }
 };

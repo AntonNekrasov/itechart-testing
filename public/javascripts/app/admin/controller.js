@@ -8,7 +8,8 @@ rpApp.admin = {};
  *     data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
  *     data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
  *     data-edit-url="@controllers.admin.routes.TechnologyController.editPage()"
- *     data-cells="name//Name, description//Description">
+ *     data-cells="name//Name, description//Description"
+ *     data-entity-signature="name">
  * </div>
  *
  * data-list-url - url for reading/sorting/filtering data
@@ -16,73 +17,135 @@ rpApp.admin = {};
  * data-edit-url - edit/create entity page url
  * data-cells - set of cell names/titles. Cells are divided by "," separator and names & titles are divided by "//" separator
  *    names are used for response mapping, titles are used for naming table cells
+ * data-entity-signature - entity property to be used, in order to identify this within the admin
+ */
+
+
+
+/**
+ * TODO: refactor:
+ * remove inappropriate information from crud and put it to controller
  */
 
 rpApp.admin.controller = function() {
     var $settings = $("#settings").first(),
-        crud = rpApp.Crud($settings);
+        crud = rpApp.Crud($settings),
+        ASCENDING = "ascending",
+        DESCENDING = "descending",
+        DESC = 0,
+        ASC = 1,
+        page = 1,
+        pageSize = 10; //TODO: update
 
     if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
 
+    // -- Event subscription
+
+    $("#rp-admin-panel")
+        .on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [])})
+        .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e])})
+        .on("click", ".sortable.table thead th", function() {_sort.apply(this, [])})
+        .on("keyup", "[data-action=\"search\"]", function() {_filter.apply(this, [])});
+
     // -- Event handlers
 
-    $("#rp-admin-panel").on("click", "[data-action=\"editPage\"]", function() {
-        var $this = $(this),
-            id = $this.attr("data-id"),
-            url = $settings.attr("data-edit-url");
-        crud.editPage(url, id);
-    })
     /**
-     * Handles deleting entity
+     * Handlers sorting
      */
-    .on("click", "[data-action=\"delete\"]", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        //    TODO: implement deletion
-        //$("#rp-confirmation").modal("show");
-    })
+    function _sort() {
+        var $this = $(this),
+            orderBy = $this.attr("data-map"),
+            $th = $(".sortable.table thead th"),
+            filter = $("[data-action=\"search\"]").first().val(),
+            asc = $this.hasClass(ASCENDING),
+            callback = new rpApp.Callback(function(){
+                $th.removeClass("sorted").removeClass(ASCENDING).removeClass(DESCENDING);
+                $this.addClass("sorted");
+                $this.addClass((asc ? DESCENDING : ASCENDING));
+            }, self, {});
+
+        crud.query(page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
+    }
+
     /**
      * Handles filtering data
      */
-    .on("keyup", "[data-action=\"search\"]", function() {
+    function _filter(){
         var $this = $(this);
         clearTimeout(window["rp-search"]);
         window["rp-search"] = setTimeout(function() {
             var $loading = $this.parent().addClass("loading"),
-            callback = new rpApp.Callback(function(){
-                $loading.removeClass("loading");
-            }, self, {});
+                situation = sit(),
+                orderBy = situation.order.by,
+                orderDirection = situation.order.direction,
+                callback = new rpApp.Callback(function(){
+                    $loading.removeClass("loading");
+                }, self, {});
 
-            crud.query(1, 10, "", 1, $this.val(), callback);
+            crud.query(1, pageSize, orderBy, orderDirection, $this.val(), callback);
         }, 1000);
+    }
 
-    })
     /**
-     * Handlers sorting
+     * Handles deleting entity
+     *
+     * @param e Event object, used for suppressing default behaviour (namely opening edit page)
      */
-    .on("click", ".sortable.table thead th", function(){
+    function _delete(e){
+        e.preventDefault();
+        e.stopPropagation();
 
         var $this = $(this),
-            $th = $(".sortable.table thead th"),
-            desc = $this.hasClass("descending"),
-            map = $this.attr("data-map"),
+            $parent = $this.parent(),
+            id = $parent.attr("data-id"),
             callback = new rpApp.Callback(function(){
-                $th.removeClass("sorted");
-                $th.removeClass("descending");
-                $th.removeClass("ascending");
-                $this.addClass("sorted");
-                $this.addClass((desc ? "ascending" : "descending"));
+                var situation = sit(),
+                    orderBy = situation.order.by,
+                    orderDirection = situation.order.direction,
+                    filter = situation.filter;
+                crud.query(page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
 
-            //    TODO: take into account pagination
-            crud.query(1, 10, map, desc ? 0 : 1, $this.val(), callback);
+        crud.remove(id, "name", "description", callback);
+    }
+
+    /**
+     * Redirects to the entity create/edit page
+     */
+    function _edit() {
+        var $this = $(this),
+            id = $this.attr("data-id"),
+            url = $settings.attr("data-edit-url");
+        crud.editPage(url, id);
+    }
+
+    // -- Private functions
+
+    /**
+     * Returns current sorting/filtering
+     */
+    function sit() {
+        var $th = $(".sortable.table thead th"),
+            $sorted = $th.filter(".sorted"),
+            situation = {};
+
+        situation.filter = $("[data-action=\"search\"]").first().val();
+        situation.order = {};
+        situation.order.by = $sorted.length > 0 ? $sorted.attr("data-map") : "";
+        if($sorted.length > 0 && $sorted.hasClass(DESCENDING)) {
+            situation.order.direction = DESC;
+        } else {
+            situation.order.direction = ASC;
+        }
+        return situation;
+    }
 
 
-    });
+
+    // -- Init section
 
 
 
-    crud.query(1, 10);
-
+    crud.query(page, pageSize);
 };
 

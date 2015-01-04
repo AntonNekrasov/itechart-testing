@@ -32,7 +32,7 @@ object TechnologyController extends Controller {
    * @param page Current page number (starts from 0)
    * @param pageSize Page size
    * @param orderBy Column to be sorted
-   * @param orderDir Order direction
+   * @param orderDir Order direction (default ASC)
    * @param filter Filter applied on language names
    */
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
@@ -41,7 +41,11 @@ object TechnologyController extends Controller {
 
     //TODO: implement counting total pages
     val result = Json.obj(
-      "data" -> Json.obj("list" -> list, "total" -> total),
+      "data" -> Json.obj(
+        "list" -> list,
+        "total" -> total,
+        "page" -> page
+      ),
       "status" -> ResponseStatus.Success.toString
     )
 
@@ -54,7 +58,8 @@ object TechnologyController extends Controller {
    * @param tech Technology to edit. None is returned for newly created entities
    */
   def editPage(tech: Option[Long]) = Action {
-    Ok(html.administration.technology.edit(tech.flatMap(id => Technology.getOne(id))))
+    val entity = tech.flatMap(id => Technology.getOne(id))
+    Ok(html.administration.technology.edit(entity))
   }
 
   /**

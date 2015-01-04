@@ -27,8 +27,8 @@
 #rp-navbar .step:first-child,
 #rp-navbar .step:last-child,
 #rp-admin-panel input,
-#rp-admin-panel .button {
-    border-radius: 0;
+.button {
+    border-radius: 0!important;
 }
 
 /* -- Admin navigation bar */

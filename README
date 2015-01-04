@@ -1,4 +1,6 @@
-This is your new Play application
+Play framework application
 =================================
 
-This file will be packaged with your application, when using `activator dist`.
+1. Install activator http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
+2. in project root run: activator run
+3. open http://localhost:9000
