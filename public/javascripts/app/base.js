@@ -1,3 +1,5 @@
+//TODO: add docs
+
 var rpApp = {};
 
 rpApp.Callback = function Callback(fn, scope, parameters){

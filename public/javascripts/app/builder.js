@@ -6,6 +6,9 @@
  * Defines the table structure
  */
 rpApp.builder = function ($settings) {
+
+    if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
+
     var self = this,
         service = rpApp.Service,
         cells = getCells(),

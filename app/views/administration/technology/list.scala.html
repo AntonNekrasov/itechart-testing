@@ -2,7 +2,6 @@
 @import enums.AdminSection
 
 @home(AdminSection.Technology, "Technology") {
-    <div id="admin-panel-wrapper">
 
         <div class="hidden" id="settings"
             data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
@@ -12,16 +11,6 @@
             data-entity-signature="name">
         </div>
 
-        @*TODO make below markup as a separate template*@
-        <div class="ui fluid icon input">
-            <input type="text" data-action="search" placeholder="Enter technology name...">
-            <i class="search icon"></i>
-        </div>
+        @crud("Enter technology name...")
 
-        <div class="ui black button" data-action="editPage">
-            Add New
-        </div>
-
-        <table class="ui sortable table" data-action="header"></table>
-    </div>
 }

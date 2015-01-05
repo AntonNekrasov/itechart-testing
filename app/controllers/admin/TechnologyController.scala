@@ -1,5 +1,6 @@
 package controllers.admin
 
+import controllers.admin
 import enums.ResponseStatus
 import models.Technology
 import play.api.data.Form
@@ -7,6 +8,8 @@ import play.api.data.Forms._
 import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
 import views.html
+
+import scala.util.{Failure, Success}
 
 /**
  * Manages administration technology section
@@ -18,7 +21,7 @@ object TechnologyController extends Controller {
    */
   val techForm = Form(
     mapping(
-      "id" -> ignored(None:Option[Long]),
+      "id" -> optional(longNumber),
       "name" -> nonEmptyText,
       "description" -> optional(text)
     )(Technology.apply)(Technology.unapply)
@@ -59,7 +62,11 @@ object TechnologyController extends Controller {
    */
   def editPage(tech: Option[Long]) = Action {
     val entity = tech.flatMap(id => Technology.getOne(id))
-    Ok(html.administration.technology.edit(entity))
+    val form = entity.map(e => techForm.fill(e)).getOrElse(techForm)
+
+//    val form = tech.flatMap(id => Technology.getOne(id)).map(e => techForm.fill(e)).getOrElse(techForm)
+
+    Ok(html.administration.technology.edit(entity, form))
   }
 
   /**
@@ -67,8 +74,16 @@ object TechnologyController extends Controller {
    */
   def createTech = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(""),
-      tech => Ok("")
+      errors => BadRequest(""),//TODO: update
+      tech => {
+        Technology.add(tech) match {
+          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
+          case Failure(e) => {
+            e.printStackTrace()
+            Redirect(admin.routes.TechnologyController.editPage()).flashing(("error", e.getLocalizedMessage))
+          }//TODO: update
+        }
+      }
     )
   }
 
@@ -77,8 +92,16 @@ object TechnologyController extends Controller {
    */
   def updateTech(id: Long) = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(""),
-      tech => Ok("")
+      errors => BadRequest(""),//TODO: update
+      tech => {
+        Technology.put(tech) match {
+          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
+          case Failure(e) => {
+            e.printStackTrace()
+            Redirect(admin.routes.TechnologyController.editPage(Some(id))).flashing(("error", e.getLocalizedMessage))
+          }//TODO: update
+        }
+      }
     )
   }
 
