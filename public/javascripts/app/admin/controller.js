@@ -91,7 +91,7 @@ rpApp.admin.controller = function() {
      *
      * @param e Event object, used for suppressing default behaviour (namely opening edit page)
      */
-    function _delete(e){
+    function _delete(e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -103,7 +103,7 @@ rpApp.admin.controller = function() {
                     orderBy = situation.order.by,
                     orderDirection = situation.order.direction,
                     filter = situation.filter;
-                crud.query(page, pageSize, orderBy, orderDirection, filter);
+                builder.query(page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
 
         builder.remove(id, "name", callback);
