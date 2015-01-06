@@ -74,7 +74,7 @@ object TechnologyController extends Controller {
    */
   def createTech = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(""),//TODO: update
+      errors => Redirect(admin.routes.TechnologyController.editPage()),//TODO: update
       tech => {
         Technology.add(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
@@ -92,7 +92,7 @@ object TechnologyController extends Controller {
    */
   def updateTech(id: Long) = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(""),//TODO: update
+      errors => Redirect(admin.routes.TechnologyController.editPage(Some(id))),//TODO: update
       tech => {
         Technology.put(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update

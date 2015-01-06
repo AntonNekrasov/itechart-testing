@@ -98,6 +98,7 @@ rpApp.admin.controller = function() {
         var $this = $(this),
             $parent = $this.parents("tr"),
             id = $parent.attr("data-id"),
+            name = $parent.attr("data-entity"),
             callback = new rpApp.Callback(function() {
                 var situation = sit(),
                     orderBy = situation.order.by,
@@ -106,7 +107,7 @@ rpApp.admin.controller = function() {
                 builder.query(page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
 
-        builder.remove(id, "name", callback);
+        builder.remove(id, name, callback);
     }
 
     /**

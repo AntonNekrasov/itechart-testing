@@ -3,48 +3,31 @@
 @import administration._
 @import enums.AdminSection
 @import helper._
+@import views.rpHelpers._
+
+@url() = @{
+    if(tech.isDefined) controllers.admin.routes.TechnologyController.updateTech(tech.get.id.get)
+    else controllers.admin.routes.TechnologyController.createTech()
+}
 
 @home(AdminSection.Technology, if(tech.isDefined) "Update" + tech.get.name else "Create New Technology") {
-@*    todo: find more elegant solution;*@
 
-    @form(if(tech.isDefined) controllers.admin.routes.TechnologyController.updateTech(tech.get.id.get) else controllers.admin.routes.TechnologyController.createTech()) {
+    @form(url) {
+        <div class="ui form">
 
-        <fieldset>
             @if(tech.isDefined) {
                 <input type="hidden" name="id" value="@techForm.data.get("id").get" />
             }
+
             @inputText(techForm("name"), '_label -> "Technology name", '_help -> "")
             @textarea(techForm("description"), '_label -> "Description", '_help -> "")
 
-        </fieldset>
+            <div class="actions">
+                <button type="submit" class="ui submit button">Save</button>
+                <a href="@controllers.admin.routes.Administration.techList()" class="btn">Cancel</a>
+            </div>
 
-        <div class="actions">
-            <input type="submit" value="Save" class="btn primary"> or
-            <a href="@controllers.admin.routes.Administration.techList()" class="btn">Cancel</a>
         </div>
 
     }
-
-    @*<div class="ui form">
-        <h4 class="ui dividing header">Personal Information</h4>
-
-        <div class="field">
-            <label>User Input</label>
-            <input type="text">
-        </div>
-
-
-        <div class="field">
-            <label>User Text</label>
-            <textarea></textarea>
-        </div>
-
-
-
-        <div class="ui error message">
-            <div class="header">We noticed some issues</div>
-        </div>
-        <div class="ui submit button">Register</div>
-    </div>
-*@
 }
