@@ -41,12 +41,12 @@ object TechnologyController extends Controller {
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
     val list = Technology.page(page, pageSize, orderBy, orderDir, filter)
     val total = Technology.total(filter)
+    val totalPages = total / pageSize + (if(total % pageSize != 0) 1 else 0)
 
-    //TODO: implement counting total pages
     val result = Json.obj(
       "data" -> Json.obj(
         "list" -> list,
-        "total" -> total,
+        "total" -> totalPages,
         "page" -> page
       ),
       "status" -> ResponseStatus.Success.toString

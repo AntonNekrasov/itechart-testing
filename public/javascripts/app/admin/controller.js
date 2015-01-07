@@ -34,7 +34,6 @@ rpApp.admin.controller = function() {
         DESCENDING = "descending",
         DESC = 0,
         ASC = 1,
-        page = 1,
         pageSize = 10; //TODO: update
 
     if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
@@ -45,6 +44,8 @@ rpApp.admin.controller = function() {
         .on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [])})
         .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e])})
         .on("click", ".sortable.table thead th", function() {_sort.apply(this, [])})
+        .on("click", ".rp-previous", function() {_previous.apply(this, [])})
+        .on("click", ".rp-next", function(){_next.apply(this, [])})
         .on("keyup", "[data-action=\"search\"]", function() {_filter.apply(this, [])});
 
     // -- Event handlers
@@ -62,7 +63,9 @@ rpApp.admin.controller = function() {
                 $th.removeClass("sorted").removeClass(ASCENDING).removeClass(DESCENDING);
                 $this.addClass("sorted");
                 $this.addClass((asc ? DESCENDING : ASCENDING));
-            }, self, {});
+            }, self, {}),
+            situation = sit(),
+            page = situation.page.current;
 
         builder.query(page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
     }
@@ -103,11 +106,31 @@ rpApp.admin.controller = function() {
                 var situation = sit(),
                     orderBy = situation.order.by,
                     orderDirection = situation.order.direction,
-                    filter = situation.filter;
+                    filter = situation.filter,
+                    page = situation.page.current;
+
                 builder.query(page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
 
         builder.remove(id, name, callback);
+    }
+
+    function _previous() {
+        var situation = sit(),
+            orderBy = situation.order.by,
+            orderDirection = situation.order.direction,
+            filter = situation.filter,
+            page = --situation.page.current;
+        if(page > 0) builder.query(page, pageSize, orderBy, orderDirection, filter);
+    }
+
+    function _next() {
+        var situation = sit(),
+            orderBy = situation.order.by,
+            orderDirection = situation.order.direction,
+            filter = situation.filter,
+            page = ++situation.page.current;
+        if(page <= situation.page.total) builder.query(page, pageSize, orderBy, orderDirection, filter);
     }
 
     /**
@@ -128,6 +151,7 @@ rpApp.admin.controller = function() {
     function sit() {
         var $th = $(".sortable.table thead th"),
             $sorted = $th.filter(".sorted"),
+            $pagination = $("[data-action=\"pagination\"]"),
             situation = {};
 
         situation.filter = $("[data-action=\"search\"]").first().val();
@@ -138,11 +162,14 @@ rpApp.admin.controller = function() {
         } else {
             situation.order.direction = ASC;
         }
+        situation.page = {};
+        situation.page.total = $pagination.attr("data-total");
+        situation.page.current = $pagination.attr("data-current");
         return situation;
     }
 
     // -- Init section
 
-    builder.query(page, pageSize);
+    builder.query(1, pageSize);
 };
 

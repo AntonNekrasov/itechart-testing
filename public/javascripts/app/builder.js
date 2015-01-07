@@ -33,11 +33,12 @@ rpApp.builder = function ($settings) {
             return $eltList.each(function() {
                 var $elt = $(this),
                     url = $settings.attr("data-list-url") + "?p=" + page + "&s=" + pageSize,
-                    success = new rpApp.Callback(function(params){
+                    success = new rpApp.Callback(function(params) {
                         var reply = params.reply,
                             entities = reply.data["list"],
                             rows = "";
                         if(reply.status === "Success") {
+                            /*writing rows*/
                             $elt.empty();
                             for(var n in entities) {
                                 if (entities.hasOwnProperty(n)) {
@@ -46,9 +47,11 @@ rpApp.builder = function ($settings) {
                                 }
                             }
                             $elt.html(rows);
+                            /*updating paging*/
+                            setPaging(reply.data.page, reply.data.total)
                         }
                     }, self, {}),
-                    error = new rpApp.Callback(function(params){
+                    error = new rpApp.Callback(function(params) {
                         var reply = params.reply;
                         var message = reply.responseText ? reply.responseText : reply.statusText;
                         //TODO: update;
@@ -143,6 +146,13 @@ rpApp.builder = function ($settings) {
         return result;
     }
 
+    function setPaging(current, total) {
+        var $pagination = $("[data-action=\"pagination\"]");
+        $pagination.attr("data-current", current).attr("data-total", total);
+        $pagination.find("[data-value=\"total\"]").html(total);
+        $pagination.find(".rp-current").val(current);
+    }
+
     // -- Init
 
     /**
@@ -160,16 +170,19 @@ rpApp.builder = function ($settings) {
 
             /*adding table body*/
             content += "<th></th><tbody data-action=\"list\"></tbody>";
-            /*adding footer TODO: rework */
-            content += "<tfoot><tr><th colspan=\"" + (cells.length + 1) + "\">" +
-                "Page&nbsp;" +
-                "<div class=\"ui transparent input\">" +
-                    "<input type=\"text\" placeholder=\"\">" +
-                "</div>" +
-                "&nbsp;of 1000" +
-                "<div class=\"ui icon button\"><i class=\"arrow left icon\"></i></div>" +
-                "<div class=\"ui icon button\"><i class=\"arrow right icon\"></i></div>" +
-            "</th></tr></tfoot>";
+            /*adding footer */
+            content += "<tfoot><tr data-action=\"pagination\" data-total=\"\" data-current=\"\">" +
+                "<th colspan=\"" + (cells.length + 1) + "\">" +
+                    "<span>Page&nbsp;</span>" +
+                    "<div class=\"ui transparent input\">" +
+                        "<input type=\"text\" class=\"rp-current\">" +
+                    "</div>" +
+                    "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
+                    "<div class=\"rp-page-buttons\">" +
+                        "<div class=\"ui icon button rp-previous\"><i class=\"arrow left icon\"></i></div>" +
+                        "<div class=\"ui icon button rp-next\"><i class=\"arrow right icon\"></i></div>" +
+                    "</div>" +
+                "</th></tr></tfoot>";
 
             $table.html(content);
         });

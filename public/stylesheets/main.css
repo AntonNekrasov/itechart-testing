@@ -1,4 +1,4 @@
-/* -- Viewport */
+/* -- ViewPort */
 
 #rp-wrap {
     min-height: 100%;
@@ -82,6 +82,17 @@
 #rp-admin-panel .table tr:hover .trash {
     visibility: visible;
     color: #888888;
+}
+
+#rp-admin-panel tfoot .rp-current,
+#rp-admin-panel tfoot [data-value=total] {
+    width: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+#rp-admin-panel tfoot .rp-page-buttons {
+    float: right;
 }
 
 .trash {
