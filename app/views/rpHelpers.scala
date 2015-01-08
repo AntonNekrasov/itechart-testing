@@ -1,6 +1,6 @@
 package views
 
-import views.html.aux.textInput
+import views.html.auxiliary.textInput
 import views.html.helper.FieldConstructor
 
 /**
