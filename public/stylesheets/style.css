@@ -1,3 +1,18 @@
+html {
+    /* TODO: update in semantic */
+    position: relative;
+    min-height: 100%;
+    height: auto!important;
+}
+body {
+    /* Margin bottom by footer height TODO: update in semantic*/
+    margin-bottom: 60px!important;
+}
+
+#rp-header {
+    overflow: hidden;
+}
+
 #rp-header .row {
     padding: 0;
 }
@@ -19,38 +34,13 @@
 #rp-footer {
     margin: 0;
     background-color: grey;
-    height: 70px;
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 .top-left-rounded {
-    border-top-left-radius: 7px!important;
+    border-top-left-radius: 10px!important;
 }
-/* ---------------------------------- */
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-    position: relative;
-    min-height: 100%;
-    height: auto!important;
-}
-body {
-    /* Margin bottom by footer height TODO: update in semantic*/
-    margin-bottom: 60px!important;
-}
-.rp-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
-    background-color: #f5f5f5;
-}
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-
 
