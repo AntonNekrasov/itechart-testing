@@ -12,17 +12,13 @@
     </head>
 
     <body>
-        <div class="ui inverted black segment rp-admin-menu-back" style="position: absolute; top: 0; bottom: 0; left: 0; width: 200px;"></div>
+        <div class="rp-admin-menu-back" style="position: absolute; top: 0; bottom: 0; left: 0; width: 200px;"></div>
 
         <div class="ui inverted black vertical segment top-left-rounded" id="rp-header">
             <div class="ui three column grid">
                 <div class="row">
                     <div class="nine wide column center aligned">
-                        @*<div class="ui inverted red segment top-left-rounded" style="position: absolute; top: 0; left : 0; width: 200px; height: auto; min-height: 100%;">*@
-                            @*:iTechArt*@
-                        @*</div>*@
-                        <h2 class="ui inverted header">Full Width Heading</h2>
-                        <p>Second section of content</p>
+                        <h2 class="ui inverted">:iTechart testing</h2>
                     </div>
                     <div class="ui four item labeled icon menu inverted right aligned five wide column">
                         <a class="item">
@@ -44,8 +40,8 @@
                     </div>
 
                     <div class="right two wide column">
-                        <div class="ui item labeled icon menu inverted segment right aligned">
-                            <div class="item right">
+                        <div class="ui menu inverted">
+                            <div class="right item right aligned" id="rp-auth">
                                 <img class="ui avatar image" src="@routes.Assets.at("images/helen.jpg")">
                                 <div class="content">
                                     <div class="header">Helen</div>
@@ -62,7 +58,7 @@
                 <i class="home icon"></i>
                 Home
             </a>
-            <a class="item">
+            <a class="item active">
                 <i class="block layout icon"></i>
                 Topics
             </a>
@@ -96,10 +92,10 @@
             </a>
         </div>
 
-        <div id="rp-footer">
+        <div id="rp-footer" class="ui inverted black segment">
             <div class="ui page grid">
                 <div class="column">
-                    <h2 class="ui inverted header">Full Width Heading</h2>
+                    @*<h2 class="ui inverted header">Full Width Heading</h2>*@
                 </div>
             </div>
         </div>
@@ -108,5 +104,6 @@
 
     @*<img src="http://antonbaranov.com/files/images/2013/itechart_bb_004.jpg">*@
     @*TODO: logo;*@
+    <img  src="@routes.Assets.at("images/Vyza0a3.png")" style="position: absolute; top: 0; left: 0; height : 68px; width: 68px; ;">
 
 </html>

@@ -6,7 +6,7 @@ html {
 }
 body {
     /* Margin bottom by footer height TODO: update in semantic*/
-    margin-bottom: 60px!important;
+    margin-bottom: 30px!important;
 }
 
 #rp-header {
@@ -17,14 +17,24 @@ body {
     padding: 0;
 }
 
-/*#rp-header .column {*/
-    /*min-height: 100%;*/
-    /*height: auto;*/
-/*}*/
+#rp-header h2 {
+    margin: 0.6em 0 0 0;
+}
 
 #rp-admin-menu {
     margin: 0;
     width: 200px;
+}
+
+.rp-admin-menu-back,
+#rp-admin-menu .item {
+    /* TODO: UPDATE IN semantic */
+    background-color: #383B3D;
+}
+
+#rp-auth {
+    padding-top: 7px;
+    cursor: pointer;
 }
 
 #rp-admin-menu .item.active {
@@ -33,8 +43,8 @@ body {
 
 #rp-footer {
     margin: 0;
-    background-color: grey;
-    height: 60px;
+    /*background-color: grey;*/
+    height: 30px;
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -43,4 +53,3 @@ body {
 .top-left-rounded {
     border-top-left-radius: 10px!important;
 }
-
