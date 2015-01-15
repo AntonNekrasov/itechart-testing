@@ -1,5 +1,7 @@
 @()
 
+@import play.api.i18n.Messages
+
 <!DOCTYPE html>
 
 <html>
@@ -12,30 +14,32 @@
     </head>
 
     <body>
-        <div class="rp-admin-menu-back" style="position: absolute; top: 0; bottom: 0; left: 0; width: 200px;"></div>
-
+        <div class="rp-admin-menu-back"></div>
+        @* HEADER *@
         <div class="ui inverted black vertical segment top-left-rounded" id="rp-header">
             <div class="ui three column grid">
                 <div class="row">
-                    <div class="nine wide column center aligned">
-                        <h2 class="ui inverted">:iTechart testing</h2>
+                    <div class="nine wide column">
+                        <div id="rp-logo" class="top-left-rounded ui inverted red">
+                            remarkable people
+                        </div>
                     </div>
                     <div class="ui four item labeled icon menu inverted right aligned five wide column">
                         <a class="item">
+                            <i class="home icon"></i>
+                            Home
+                        </a>
+                        <a class="item">
+                            <i class="rocket icon"></i>
+                            Test
+                        </a>
+                        <a class="item">
+                            <i class="trophy icon"></i>
+                            Results
+                        </a>
+                        <a class="item">
                             <i class="settings icon"></i>
-                            Admin
-                        </a>
-                        <a class="item">
-                            <i class="trophy icon"></i>
-                            Achievements
-                        </a>
-                        <a class="item">
-                            <i class="trophy icon"></i>
-                            Achievements
-                        </a>
-                        <a class="item">
-                            <i class="shop icon"></i>
-                            Store
+                            @Messages("header.admin")
                         </a>
                     </div>
 
@@ -52,7 +56,7 @@
                 </div>
             </div>
         </div>
-
+        @* LEFT MENU *@
         <div class="ui left vertical inverted labeled icon menu" id="rp-admin-menu">
             <a class="right item">
                 <i class="home icon"></i>
@@ -72,7 +76,8 @@
             </a>
             <a class="item">
                 <i class="mail icon"></i>
-                Messages
+                Me
+                ssages
             </a>
             <a class="item">
                 <i class="chat icon"></i>
@@ -91,19 +96,19 @@
                 Settings
             </a>
         </div>
-
-        <div id="rp-footer" class="ui inverted black segment">
-            <div class="ui page grid">
-                <div class="column">
-                    @*<h2 class="ui inverted header">Full Width Heading</h2>*@
-                </div>
-            </div>
+        @* CONTENT *@
+        <div id="rp-admin-content">
+            <h1> CONTENT </h1>
+        </div>
+        @* FOOTER *@
+        <div id="rp-footer" class="ui inverted black segment right aligned">
+            Lorem ipsum dolor (c)
         </div>
 
     </body>
 
     @*<img src="http://antonbaranov.com/files/images/2013/itechart_bb_004.jpg">*@
     @*TODO: logo;*@
-    <img  src="@routes.Assets.at("images/Vyza0a3.png")" style="position: absolute; top: 0; left: 0; height : 68px; width: 68px; ;">
+    @*<img  src="@routes.Assets.at("images/Vyza0a3.png")" style="position: absolute; top: 0; left: 0; height : 68px; width: 68px; ;">*@
 
 </html>
