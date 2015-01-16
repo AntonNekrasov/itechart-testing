@@ -85,12 +85,11 @@
 
 #rp-admin-content {
     padding-left: 230px;
+    padding-right: 30px;
     width: 100%;
     display: inline-block;
     margin-left: -200px;
 }
-
-
 
 #rp-footer {
     margin: 0;

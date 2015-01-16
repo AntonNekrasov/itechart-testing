@@ -60,7 +60,7 @@ object TechnologyController extends Controller {
    *
    * @param tech Technology to edit. None is returned for newly created entities
    */
-  def editPage(tech: Option[Long]) = Action {
+  def editPage(tech: Option[Long]) = Action { implicit request =>
     val entity = tech.flatMap(id => Technology.getOne(id))
     val form = entity.map(e => techForm.fill(e)).getOrElse(techForm)
 

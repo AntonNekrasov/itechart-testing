@@ -8,39 +8,42 @@ import views._
  */
 object Administration extends Controller {
 
-  val Technology = Ok(html.administration.technology.list())
-
-  val Questionnaire = Ok(html.administration.questionnaire.list())
-
-  val Test = Ok(html.administration.test.list())
-
-  val Quiz = Ok(html.administration.quiz.list())
-
   // -- Actions
 
   /**
    * Handle default path requests, redirect to admin home
    */
-  def home = Action { Technology }
+  def home = Action { implicit request =>
+//    TODO: update;
+    Ok(html.administration.technology.list())
+  }
 
   /**
    * Forwards to admin technology section
    */
-  def techList = Action { Technology }
+  def techList = Action { implicit request =>
+    Ok(html.administration.technology.list())
+  }
 
   /**
    * Forwards to admin quiz section
    */
-  def quizList = Action { Quiz }
+  def quizList = Action { implicit request =>
+    Ok(html.administration.quiz.list())
+  }
 
   /**
    * Forwards to admin questionnaires section
    */
-  def questList = Action { Questionnaire }
+  def questList = Action { implicit request =>
+    Ok(html.administration.questionnaire.list())
+  }
 
   /**
    * Forwards to admin tests section
    */
-  def testList = Action { Test }
+  def testList = Action { implicit request =>
+    Ok(html.administration.test.list())
+  }
 
 }

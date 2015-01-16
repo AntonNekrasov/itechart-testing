@@ -27,15 +27,15 @@
                     <div class="ui four item labeled icon menu inverted right aligned five wide column">
                         <a class="item">
                             <i class="home icon"></i>
-                            Home
+                            @Messages("header.home")
                         </a>
                         <a class="item">
                             <i class="rocket icon"></i>
-                            Test
+                            @Messages("header.test")
                         </a>
                         <a class="item">
                             <i class="trophy icon"></i>
-                            Results
+                            @Messages("header.results")
                         </a>
                         <a class="item">
                             <i class="settings icon"></i>
@@ -76,8 +76,7 @@
             </a>
             <a class="item">
                 <i class="mail icon"></i>
-                Me
-                ssages
+                Messages
             </a>
             <a class="item">
                 <i class="chat icon"></i>
@@ -99,6 +98,32 @@
         @* CONTENT *@
         <div id="rp-admin-content">
             <h1> CONTENT </h1>
+
+            <table class="ui table">
+                <thead>
+                    <tr><th class="ten wide">Name</th>
+                        <th class="six wide">Status</th>
+                    </tr></thead>
+                <tbody>
+                    <tr>
+                        <td>John</td>
+                        <td>Approved</td>
+                    </tr>
+                    <tr>
+                        <td>Jamie</td>
+                        <td>Approved</td>
+                    </tr>
+                    <tr>
+                        <td>Jill</td>
+                        <td>Denied</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr><th>3 People</th>
+                        <th>2 Approved</th>
+                    </tr></tfoot>
+            </table>
+
         </div>
         @* FOOTER *@
         <div id="rp-footer" class="ui inverted black segment right aligned">

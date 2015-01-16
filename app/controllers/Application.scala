@@ -15,7 +15,7 @@ object Application extends Controller {
   //
 
   def index = Action { implicit request =>
-    Ok(html.auxiliary.stub())
+    Redirect(admin.routes.Administration.home)
   }
 
 }
