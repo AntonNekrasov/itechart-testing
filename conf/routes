@@ -5,8 +5,13 @@
 # Home page
 GET           /                                   controllers.Application.index
 
+# Main sections
+GET           /home                               controllers.Application.homeSection
+GET           /results                            controllers.Application.resultsSection
+GET           /tests                              controllers.Application.testsSection
+GET           /admin                              controllers.Application.adminSection
+
 # Admin section
-GET           /admin                              controllers.admin.Administration.home
 GET           /admin/technology                   controllers.admin.Administration.techList
 GET           /admin/quiz                         controllers.admin.Administration.quizList
 GET           /admin/questionnarie                controllers.admin.Administration.questList

@@ -11,14 +11,6 @@ object Administration extends Controller {
   // -- Actions
 
   /**
-   * Handle default path requests, redirect to admin home
-   */
-  def home = Action { implicit request =>
-//    TODO: update;
-    Ok(html.administration.technology.list())
-  }
-
-  /**
    * Forwards to admin technology section
    */
   def techList = Action { implicit request =>

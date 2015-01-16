@@ -36,6 +36,7 @@
 
 .rp-admin-menu-back {
     position: absolute; top: 0; bottom: 0; left: 0; width: 200px;
+    z-index: -1;
 }
 
 .rp-admin-menu-back,
