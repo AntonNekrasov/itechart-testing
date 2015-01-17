@@ -85,11 +85,49 @@
 }
 
 #rp-admin-content {
-    padding-left: 230px;
-    padding-right: 30px;
+    padding: 0px 30px 30px 230px;
     width: 100%;
     display: inline-block;
     margin-left: -200px;
+}
+
+#rp-admin-content .trash {
+    float: right;
+    visibility: hidden;
+}
+
+#rp-admin-content .table tr {
+    cursor: pointer;
+}
+
+#rp-admin-content .table th {
+    border-right: none;
+    border-left: none;
+}
+
+#rp-admin-content .table tr:hover .trash {
+    visibility: visible;
+    color: #888888;
+}
+
+#rp-admin-content tfoot .rp-current,
+#rp-admin-content tfoot [data-value=total] {
+    width: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+#rp-admin-content tfoot .rp-page-buttons {
+    float: right;
+}
+
+.trash {
+    transition: all .2s ease-in-out;
+}
+
+.trash:hover {
+    transform: scale(1.3);
+    color: black!important;
 }
 
 #rp-footer {

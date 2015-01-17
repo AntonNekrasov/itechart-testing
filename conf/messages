@@ -1,11 +1,12 @@
 header.admin = Admin
 header.results = Results
-header.test = Test
+header.test = Start Test
 header.home = Home
-
 
 # -- Admin
 admin.left.panel.technologies = Technologies
 admin.left.panel.tests = Tests
 admin.left.panel.quiz = Quiz
 admin.left.panel.questionnaire = Questionnaire
+
+admin.center.panel.add.new = Add New

@@ -40,7 +40,7 @@ rpApp.admin.controller = function() {
 
     // -- Event subscription
 
-    $("#rp-admin-panel")
+    $("#rp-admin-content")
         .on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [])})
         .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e])})
         .on("click", ".sortable.table thead th", function() {_sort.apply(this, [])})
