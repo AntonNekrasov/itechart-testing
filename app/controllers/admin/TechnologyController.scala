@@ -66,7 +66,7 @@ object TechnologyController extends Controller {
 
 //    val form = tech.flatMap(id => Technology.getOne(id)).map(e => techForm.fill(e)).getOrElse(techForm)
 
-    Ok(html.administration.technology.edit(entity, form))
+    Ok(html.administration.technology.edit(form))
   }
 
   /**
@@ -74,7 +74,7 @@ object TechnologyController extends Controller {
    */
   def createTech = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => Redirect(admin.routes.TechnologyController.editPage()),//TODO: update
+      errors => BadRequest(html.administration.technology.edit(errors)),
       tech => {
         Technology.add(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
@@ -92,7 +92,7 @@ object TechnologyController extends Controller {
    */
   def updateTech(id: Long) = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => Redirect(admin.routes.TechnologyController.editPage(Some(id))),//TODO: update
+      errors => BadRequest(html.administration.technology.edit(errors)),
       tech => {
         Technology.put(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update

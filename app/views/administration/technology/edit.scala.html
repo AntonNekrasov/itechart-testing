@@ -1,32 +1,47 @@
-@(tech: Option[Technology], techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang)
+@(techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang)
 
 @import administration._
 @import enums.AdminSection
 @import helper._
 @import views.rpHelpers._
 
-@url() = @{
-    if(tech.isDefined) controllers.admin.routes.TechnologyController.updateTech(tech.get.id.get)
-    else controllers.admin.routes.TechnologyController.createTech()
+@isNew = @{
+    techForm.value.map(_.id).isEmpty
 }
 
-@home(AdminSection.Technology, if(tech.isDefined) "Update" + tech.get.name else "Create New Technology") {
+@url() = @{
+    if(isNew) controllers.admin.routes.TechnologyController.createTech()
+    else controllers.admin.routes.TechnologyController.updateTech(techForm.value.flatMap(_.id).get)
+}
+
+@home(AdminSection.Technology, if(isNew) "Create New Technology" else "Update " + techForm.value.map { _.name }.getOrElse("Technology")) {
 
     @form(url) {
-        <div class="ui form">
+        <div class="ui warning form segment">
 
-            @if(tech.isDefined) {
-                <input type="hidden" name="id" value="@techForm.data.get("id").get" />
-            }
-
-            @inputText(techForm("name"), '_label -> "Technology name", '_help -> "")
-            @textarea(techForm("description"), '_label -> "Description", '_help -> "")
-
-            <div class="actions">
-                <button type="submit" class="ui submit button">Save</button>
-                <a href="@controllers.admin.routes.Administration.techList()" class="btn">Cancel</a>
+            <div class="ui warning message">
+                <div class="header">Could you check something!</div>
+                <ul class="list">
+                    <li>You forgot your <b>first name</b></li>
+                    <li>And also your <b>last name</b></li>
+                </ul>
             </div>
 
+            <div class="ui form">
+
+                @if(!isNew) {
+                    <input type="hidden" name="id" value="@techForm.data.get("id").get" />
+                }
+
+                @inputText(techForm("name"), '_label -> "Technology name", '_help -> "")
+                @textarea(techForm("description"), '_label -> "Description", '_help -> "")
+
+                <div class="actions">
+                    <button type="submit" class="ui submit button">Save</button>
+                    <a href="@controllers.admin.routes.Administration.techList()" class="btn">Cancel</a>
+                </div>
+
+            </div>
         </div>
 
     }

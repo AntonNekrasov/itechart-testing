@@ -2,7 +2,7 @@
 @import administration._
 @import enums.AdminSection
 
-@home(AdminSection.Technology, "Technology") {
+@home(AdminSection.Technology, "Technology list") {
 
         <div class="hidden" id="settings"
             data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
@@ -12,16 +12,16 @@
             data-entity-signature="name">
         </div>
 
-        <h1>Technology list</h1>
-
-        <div class="ui ignored info icon message">
-            <i class="info icon"></i>
-            <div class="content">
-                @* TODO: update content *@
-                <h3 class="header">Lorem Ipsum</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula justo, suscipit id hendrerit eu, mattis vel nisl. In cursus aliquam euismod. Pellentesque fermentum congue nunc vel porttitor. Aenean bibendum auctor nisl sagittis interdum. Sed ac elit commodo, vestibulum turpis eu, tincidunt metus. Sed accumsan lacus sit amet tortor cursus, ac vulputate nulla facilisis. Nullam semper rhoncus enim eget consectetur. Nam ac placerat tortor. Morbi rutrum libero egestas massa molestie blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet enim sit amet metus maximus dictum. Aliquam eget aliquet felis. Nunc gravida nec lacus ut eleifend. Maecenas consectetur mauris est, sed hendrerit velit ultricies et. Vivamus sed gravida magna. Mauris at accumsan urna, a dapibus dui.</p>
-            </div>
-        </div>
-
-        @crud("Enter technology name...")
+        @crud("Enter technology name...",
+              "Lorem Ipsum",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula justo, suscipit id hendrerit eu," +
+                " mattis vel nisl. In cursus aliquam euismod. Pellentesque fermentum congue nunc vel porttitor. Aenean" +
+                " bibendum auctor nisl sagittis interdum. Sed ac elit commodo, vestibulum turpis eu, tincidunt metus." +
+                " Sed accumsan lacus sit amet tortor cursus, ac vulputate nulla facilisis. Nullam semper rhoncus enim" +
+                " eget consectetur. Nam ac placerat tortor. Morbi rutrum libero egestas massa molestie blandit. " +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet enim sit amet metus" +
+                " maximus dictum. Aliquam eget aliquet felis. Nunc gravida nec lacus ut eleifend. Maecenas consectetur" +
+                " mauris est, sed hendrerit velit ultricies et. Vivamus sed gravida magna. Mauris at accumsan urna," +
+                " a dapibus dui."
+        )
 }

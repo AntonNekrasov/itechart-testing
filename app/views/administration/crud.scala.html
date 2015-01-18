@@ -1,4 +1,12 @@
-@(placeholder: String)(implicit request: Request[_], lang: play.api.i18n.Lang)
+@(placeholder: String, infoHeader: String, infoDetails: String)(implicit request: Request[_], lang: play.api.i18n.Lang)
+
+<div class="ui ignored info icon message">
+    <i class="info icon"></i>
+    <div class="content">
+        <h3 class="header">@infoHeader</h3>
+        <p>@infoDetails</p>
+    </div>
+</div>
 
 <div class="ui segment">
     <div class="ui fluid action input left icon">
