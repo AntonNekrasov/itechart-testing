@@ -7,6 +7,7 @@ import scala.util.Try
 /**
  * Defines basic CRUD operations
  */
+//TODO: add try monads
 trait BaseDAO[T<:Model] {
 
   /**

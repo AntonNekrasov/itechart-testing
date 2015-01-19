@@ -10,3 +10,11 @@ admin.left.panel.quiz = Экзамен
 admin.left.panel.questionnaire = Questionnaire
 
 admin.center.panel.add.new = Создать
+
+# -- Errors
+error.unable.update = Не удалось обновить запись
+error.unable.create = Не удалось добавить запись
+
+# -- Successes
+success.updated.record = Запись успешно обновлена
+success.created.record = Запись успешно добавлена

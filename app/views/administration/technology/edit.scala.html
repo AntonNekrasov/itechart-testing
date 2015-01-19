@@ -1,4 +1,4 @@
-@(techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang)
+@(techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
 
 @import administration._
 @import enums.AdminSection
@@ -19,13 +19,15 @@
     @form(url) {
         <div class="ui warning form segment">
 
-            <div class="ui warning message">
-                <div class="header">Could you check something!</div>
-                <ul class="list">
-                    <li>You forgot your <b>first name</b></li>
-                    <li>And also your <b>last name</b></li>
-                </ul>
-            </div>
+            @flash.get("error").map { message =>
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Error
+                    </div>
+                    <p>@message</p>
+                </div>
+            }
 
             <div class="ui form">
 

@@ -11,6 +11,8 @@ case class Technology(id: Option[Long],
                       name: String,
                       description: Option[String]) extends Model(id)
 
+
+//TODO: add try monads
 object Technology extends BaseDAO[Technology] {
 
   def apply(): Technology = new Technology(None, "", None)

@@ -1,4 +1,4 @@
-@()(implicit request: Request[_], lang: play.api.i18n.Lang)
+@()(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
 @import administration._
 @import enums.AdminSection
 
@@ -11,6 +11,16 @@
             data-cells="name//Name, description//Description"
             data-entity-signature="name">
         </div>
+
+        @flash.get("success").map { message =>
+            <div class="ui positive message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Success
+                </div>
+                <p>@message</p>
+            </div>
+        }
 
         @crud("Enter technology name...",
               "Lorem Ipsum",

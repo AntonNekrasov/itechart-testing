@@ -3,12 +3,13 @@ package controllers.admin
 import controllers.admin
 import enums.ResponseStatus
 import models.Technology
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
 import views.html
-
 import scala.util.{Failure, Success}
 
 /**
@@ -30,7 +31,7 @@ object TechnologyController extends Controller {
   // -- Actions
 
   /**
-   * Displays the paginated list of programming technologies.
+   * Displays the paginated list of programming technologies
    *
    * @param page Current page number (starts from 0)
    * @param pageSize Page size
@@ -51,7 +52,6 @@ object TechnologyController extends Controller {
       ),
       "status" -> ResponseStatus.Success.toString
     )
-
     Ok(result).as(JSON)
   }
 
@@ -70,18 +70,19 @@ object TechnologyController extends Controller {
   }
 
   /**
-   * Stores new technology to a database.
+   * Stores new technology to a database
    */
   def createTech = Action { implicit request =>
     techForm.bindFromRequest.fold(
       errors => BadRequest(html.administration.technology.edit(errors)),
       tech => {
         Technology.add(tech) match {
-          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
-          case Failure(e) => {
-            e.printStackTrace()
-            Redirect(admin.routes.TechnologyController.editPage()).flashing(("error", e.getLocalizedMessage))
-          }//TODO: update
+          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
+            Messages("success.created.record")))
+          case Failure(e) =>
+            Logger.error(Messages("error.unable.create.record"), e)
+            Redirect(admin.routes.TechnologyController.editPage()).flashing(("error",
+              Messages("error.unable.create.record") + ": " + e.getLocalizedMessage))
         }
       }
     )
@@ -89,17 +90,20 @@ object TechnologyController extends Controller {
 
   /**
    * Updates an existing technology
+   *
+   * @param id Technology id, used for getting appropriate record
    */
   def updateTech(id: Long) = Action { implicit request =>
     techForm.bindFromRequest.fold(
       errors => BadRequest(html.administration.technology.edit(errors)),
       tech => {
         Technology.put(tech) match {
-          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("updated", "success"))//TODO: update
-          case Failure(e) => {
-            e.printStackTrace()
-            Redirect(admin.routes.TechnologyController.editPage(Some(id))).flashing(("error", e.getLocalizedMessage))
-          }//TODO: update
+          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
+            Messages("success.updated.record")))
+          case Failure(e) =>
+            Logger.error(Messages("error.unable.update.record"), e)
+            Redirect(admin.routes.TechnologyController.editPage(Some(id))).flashing(("error",
+              Messages("error.unable.update.record") + ": " + e.getLocalizedMessage))
         }
       }
     )
@@ -107,6 +111,8 @@ object TechnologyController extends Controller {
 
   /**
    * Removes an existing technology
+   *
+   * @param id Technology id. using for getting appropriate record
    */
   def removeTech(id: Long) = Action {
     Technology.rem(id)

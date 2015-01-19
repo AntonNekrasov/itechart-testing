@@ -10,3 +10,11 @@ admin.left.panel.quiz = Quiz
 admin.left.panel.questionnaire = Questionnaire
 
 admin.center.panel.add.new = Add New
+
+# -- Errors
+error.unable.update.record = Unable to update record
+error.unable.create.record = Unable to create record
+
+# -- Successes
+success.updated.record = Record has successfully been updated
+success.created.record = Record has successfully been added
