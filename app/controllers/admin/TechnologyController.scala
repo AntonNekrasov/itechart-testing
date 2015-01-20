@@ -10,7 +10,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
 import views.html
-import scala.util.{Failure, Success}
+import scala.util.{Try, Failure, Success}
 
 /**
  * Manages administration technology section
@@ -58,15 +58,20 @@ object TechnologyController extends Controller {
   /**
    * Displays technology create/edit page
    *
-   * @param tech Technology to edit. None is returned for newly created entities
+   * @param techId Technology ID to edit. None is returned for newly created entities
    */
-  def editPage(tech: Option[Long]) = Action { implicit request =>
-    val entity = tech.flatMap(id => Technology.getOne(id))
-    val form = entity.map(e => techForm.fill(e)).getOrElse(techForm)
+  def editPage(techId: Option[Long]) = Action { implicit request =>
+    val entity: Option[Try[Technology]] = techId.map(id => Technology.getOne(id))
+    val form: Try[Form[Technology]] = entity map {v => v.map(f => techForm.fill(f))
+    } getOrElse(Success(techForm))
 
-//    val form = tech.flatMap(id => Technology.getOne(id)).map(e => techForm.fill(e)).getOrElse(techForm)
-
-    Ok(html.administration.technology.edit(form))
+    form match {
+      case Success(form) => Ok(html.administration.technology.edit(form))
+      case Failure(e) => {
+//        todo: resolve issue with flashing, without redirecting
+        BadRequest(html.administration.technology.list()).flashing(("error", Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
+      }
+    }
   }
 
   /**

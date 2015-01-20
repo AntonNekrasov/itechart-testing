@@ -22,6 +22,16 @@
             </div>
         }
 
+        @flash.get("error").map { message =>
+            <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Success
+                </div>
+                <p>@message</p>
+            </div>
+        }
+
         @crud("Enter technology name...",
               "Lorem Ipsum",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula justo, suscipit id hendrerit eu," +

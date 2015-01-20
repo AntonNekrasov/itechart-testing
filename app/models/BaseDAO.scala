@@ -25,11 +25,12 @@ trait BaseDAO[T<:Model] {
   def add(obj: T): Try[T] = {
     def aux = {
       val tables = AppDB.findTablesFor(obj)
-      inTransaction(
-        tables.map(_.insert(obj))
-      )
+      tables.map(_.insert(obj))
     }
-    Try(aux.head)
+
+    inTransaction(
+      Try(aux.head)
+    )
   }
 
   /**
@@ -40,11 +41,11 @@ trait BaseDAO[T<:Model] {
   def put(obj: T): Try[Unit] = {
     def aux = {
       val tables = AppDB.findTablesFor(obj)
-      inTransaction(
-        tables.map(_.update(obj))
-      )
+      tables.map(_.update(obj))
     }
-    Try(aux.head)
+    inTransaction(
+      Try(aux.head)
+    )
   }
 
   /**
@@ -52,12 +53,15 @@ trait BaseDAO[T<:Model] {
    *
    * @param id ID of the object to be found
    */
-  def getOne(id: Long): Option[T] = {
-    val table = AppDB.findTablesFor(createT(id)).head
-    inTransaction(
+  def getOne(id: Long): Try[T] = {
+    def aux = {
+      val table = AppDB.findTablesFor(createT(id)).head
       from(table)(a =>
         where(a.id === Some(id) and a.deleted === false) select a
-      ).headOption
+      )
+    }
+    inTransaction(
+      Try(aux.head)
     )
   }
 

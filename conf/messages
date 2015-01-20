@@ -14,6 +14,7 @@ admin.center.panel.add.new = Add New
 # -- Errors
 error.unable.update.record = Unable to update record
 error.unable.create.record = Unable to create record
+error.unable.load.record = Unable to load record
 
 # -- Successes
 success.updated.record = Record has successfully been updated
