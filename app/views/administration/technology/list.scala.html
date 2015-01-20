@@ -13,26 +13,26 @@
         </div>
 
         @flash.get("success").map { message =>
-            <div class="ui positive message">
+            <div class="ui positive message hidden rp-flash">
                 <i class="close icon"></i>
                 <div class="header">
-                    Success
+                    @Messages("success")
                 </div>
                 <p>@message</p>
             </div>
         }
 
         @flash.get("error").map { message =>
-            <div class="ui negative message">
+            <div class="ui negative message hidden rp-flash">
                 <i class="close icon"></i>
                 <div class="header">
-                    Success
+                    @Messages("error")
                 </div>
                 <p>@message</p>
             </div>
         }
 
-        @crud("Enter technology name...",
+        @crud(Messages("admin.center.panel.edit.technology"),
               "Lorem Ipsum",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula justo, suscipit id hendrerit eu," +
                 " mattis vel nisl. In cursus aliquam euismod. Pellentesque fermentum congue nunc vel porttitor. Aenean" +

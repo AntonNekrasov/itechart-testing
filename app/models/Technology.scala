@@ -13,6 +13,7 @@ case class Technology(id: Option[Long],
 
 
 //TODO: add try monads
+//TODO: add dynamic requests
 object Technology extends BaseDAO[Technology] {
 
   def apply(): Technology = new Technology(None, "", None)

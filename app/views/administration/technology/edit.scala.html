@@ -20,10 +20,10 @@
         <div class="ui warning form segment">
 
             @flash.get("error").map { message =>
-                <div class="ui negative message">
+                <div class="ui negative message hidden rp-flash">
                     <i class="close icon"></i>
                     <div class="header">
-                        Error
+                        @Messages("error")
                     </div>
                     <p>@message</p>
                 </div>

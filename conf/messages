@@ -11,11 +11,16 @@ admin.left.panel.questionnaire = Questionnaire
 
 admin.center.panel.add.new = Add New
 
+# -- Admin / Technology
+admin.center.panel.edit.technology = Enter technology name...
+
 # -- Errors
+error = Error
 error.unable.update.record = Unable to update record
 error.unable.create.record = Unable to create record
 error.unable.load.record = Unable to load record
 
 # -- Successes
+success = Success
 success.updated.record = Record has successfully been updated
 success.created.record = Record has successfully been added

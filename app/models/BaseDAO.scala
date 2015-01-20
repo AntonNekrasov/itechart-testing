@@ -7,7 +7,6 @@ import scala.util.Try
 /**
  * Defines basic CRUD operations
  */
-//TODO: add try monads
 trait BaseDAO[T<:Model] {
 
   /**
@@ -27,10 +26,7 @@ trait BaseDAO[T<:Model] {
       val tables = AppDB.findTablesFor(obj)
       tables.map(_.insert(obj))
     }
-
-    inTransaction(
-      Try(aux.head)
-    )
+    inTransaction(Try(aux.head))
   }
 
   /**
@@ -43,9 +39,7 @@ trait BaseDAO[T<:Model] {
       val tables = AppDB.findTablesFor(obj)
       tables.map(_.update(obj))
     }
-    inTransaction(
-      Try(aux.head)
-    )
+    inTransaction(Try(aux.head))
   }
 
   /**
@@ -60,9 +54,7 @@ trait BaseDAO[T<:Model] {
         where(a.id === Some(id) and a.deleted === false) select a
       )
     }
-    inTransaction(
-      Try(aux.head)
-    )
+    inTransaction(Try(aux.head))
   }
 
   /**
@@ -70,15 +62,17 @@ trait BaseDAO[T<:Model] {
    *
    * @param id ID of the object to be removed
    */
-  def rem(id: Long): Unit = {
-    val table = AppDB.findTablesFor(createT(id)).head
-    inTransaction(
+  def rem(id: Long): Try[Int] = {
+    def aux = {
+      val table = AppDB.findTablesFor(createT(id)).head
       update(table) (a =>
         where(a.id === Some(id))
           set(a.deleted := true)
       )
-    )
+    }
+    inTransaction(Try(aux))
   }
+
 }
 
 /**

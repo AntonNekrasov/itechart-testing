@@ -63,14 +63,12 @@ object TechnologyController extends Controller {
   def editPage(techId: Option[Long]) = Action { implicit request =>
     val entity: Option[Try[Technology]] = techId.map(id => Technology.getOne(id))
     val form: Try[Form[Technology]] = entity map {v => v.map(f => techForm.fill(f))
-    } getOrElse(Success(techForm))
+    } getOrElse Success(techForm)
 
     form match {
-      case Success(form) => Ok(html.administration.technology.edit(form))
-      case Failure(e) => {
-//        todo: resolve issue with flashing, without redirecting
-        BadRequest(html.administration.technology.list()).flashing(("error", Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
-      }
+      case Success(f) => Ok(html.administration.technology.edit(f))
+      case Failure(e) => BadRequest(html.administration.technology.list())
+        .flashing(("error", Messages("error.unable.load.record") + ": " + e.getLocalizedMessage)) // todo: resolve issue with flashing, without redirecting
     }
   }
 
@@ -85,7 +83,7 @@ object TechnologyController extends Controller {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
             Messages("success.created.record")))
           case Failure(e) =>
-            Logger.error(Messages("error.unable.create.record"), e)
+            Logger.error("Unable to create record", e)
             Redirect(admin.routes.TechnologyController.editPage()).flashing(("error",
               Messages("error.unable.create.record") + ": " + e.getLocalizedMessage))
         }
@@ -106,7 +104,7 @@ object TechnologyController extends Controller {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
             Messages("success.updated.record")))
           case Failure(e) =>
-            Logger.error(Messages("error.unable.update.record"), e)
+            Logger.error("Unable to update record", e)
             Redirect(admin.routes.TechnologyController.editPage(Some(id))).flashing(("error",
               Messages("error.unable.update.record") + ": " + e.getLocalizedMessage))
         }
@@ -120,8 +118,10 @@ object TechnologyController extends Controller {
    * @param id Technology id. using for getting appropriate record
    */
   def removeTech(id: Long) = Action {
-    Technology.rem(id)
-    Ok(Json.obj("status" -> ResponseStatus.Success.toString))
+    Technology.rem(id) match {
+      case Success(_) => Ok(Json.obj("status" -> ResponseStatus.Success.toString))
+      case Failure(e) => BadRequest(Json.obj("status" -> ResponseStatus.Error.toString, "error" -> e.getLocalizedMessage))
+    }
   }
 
 }

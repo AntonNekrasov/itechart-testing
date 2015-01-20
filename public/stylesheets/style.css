@@ -1,3 +1,7 @@
+body {
+    position: static!important;
+}
+
 #rp-header {
     overflow: hidden;
 }
