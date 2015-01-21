@@ -17,7 +17,7 @@ case class Technology(id: Option[Long],
 object Technology extends BaseDAO[Technology] {
 
   def apply(): Technology = new Technology(None, "", None)
-  def apply(id: Option[Long]  = None) = new Technology(id, "", None)
+  def apply(id: Option[Long] = None) = new Technology(id, "", None)
 
   // -- Supplementary functions
 
@@ -35,7 +35,8 @@ object Technology extends BaseDAO[Technology] {
     override def writes(o: Technology): JsObject = Json.obj(
       "id" -> o.id.getOrElse("").toString,
       "name" -> o.name,
-      "description" -> o.description
+      "description" -> o.description,
+      "updated" -> o.updated
     )
   }
 
