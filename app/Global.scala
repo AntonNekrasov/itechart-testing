@@ -25,7 +25,6 @@ object Global extends GlobalSettings{
    *
    * @param app Current application
    */
-
   override def onStart(app: Application): Unit = {
     SessionFactory.concreteFactory = app.configuration.getString("db.default.driver") match  {
       case Some("org.h2.Driver") => Some(() => getSession(new H2Adapter, app))

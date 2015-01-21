@@ -145,12 +145,36 @@ rpApp.builder = function ($settings) {
         }
         return result;
     }
-
+    /**
+     * Sets the current page, and total amount of pages, disables buttons, if there are no previous/next pages
+     *
+     * @param current is the current page
+     * @param total is the total amount of pages (note: pages, not records)
+     */
     function setPaging(current, total) {
-        var $pagination = $("[data-action=\"pagination\"]");
-        $pagination.attr("data-current", current).attr("data-total", total);
-        $pagination.find("[data-value=\"total\"]").html(total);
-        $pagination.find(".rp-current").val(current);
+
+        var $pagination = $("[data-action=\"pagination\"]"),
+            $info = $(".rp-pagination-info"),
+            $empty = $("rp-pagination-empty");
+
+        $pagination.find(".button").removeClass("disabled");
+        if(current <= 1) {
+            $pagination.find(".rp-previous").addClass("disabled");
+        }
+        if (current >= total) {
+            $pagination.find(".rp-next").addClass("disabled");
+        }
+
+        if(total == 0) {
+            $info.addClass("hidden");
+            $empty.removeClass("hidden");
+        } else {
+            $info.removeClass("hidden");
+            $empty.addClass("hidden");
+            $pagination.attr("data-current", current).attr("data-total", total);
+            $pagination.find("[data-value=\"total\"]").html(total);
+            $pagination.find(".rp-current").val(current);
+        }
     }
 
     // -- Init
@@ -173,17 +197,20 @@ rpApp.builder = function ($settings) {
             /*adding footer */
             content += "<tfoot><tr data-action=\"pagination\" data-total=\"\" data-current=\"\">" +
                 "<th colspan=\"" + (cells.length + 1) + "\">" +
-                    "<span>Page&nbsp;</span>" +
-                    "<div class=\"ui transparent input\">" +
-                        "<input type=\"text\" class=\"rp-current\">" +
-                    "</div>" +
-                    "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
-                    "<div class=\"rp-page-buttons\">" +
-                        "<div class=\"ui icon button rp-previous\"><i class=\"arrow left icon\"></i></div>" +
-                        "<div class=\"ui icon button rp-next\"><i class=\"arrow right icon\"></i></div>" +
+                    "<span class=\"rp-pagination-info\">" +
+                        "<span>Page&nbsp;</span>" +
+                        "<div class=\"ui transparent input\">" +
+                            "<input type=\"text\" class=\"rp-current\">" +
+                        "</div>" +
+                        "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
+                    "</span>" +
+                    "<span class=\"rp-pagination-empty hidden\">&nbsp;No records&nbsp;</span>" +
+                    "<div class=\"rp-page-buttons ui buttons\">" +
+                        "<div class=\"ui button rp-previous\">Previous</div>" +
+                        "<div class=\"or\" data-text=\"\"></div>" +
+                        "<div class=\"ui positive button rp-next\">Next</div>" +
                     "</div>" +
                 "</th></tr></tfoot>";
-
             $table.html(content);
         });
     })();

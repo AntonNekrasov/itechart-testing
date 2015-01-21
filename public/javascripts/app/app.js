@@ -9,7 +9,7 @@ $(document).ready(function() {
 
     window["rp-flash-delay"] = setTimeout(function(){
         $(".rp-flash").transition(transition);
-    }, 5000);
+    }, 8000);
 
     rpApp.admin.controller();
 });

@@ -7,7 +7,7 @@ import scala.util.Try
 /**
  * Defines basic CRUD operations
  */
-trait BaseDAO[T<:Model] {
+trait BaseDAO[T <: Model] {
 
   /**
    * Returns the sample of particular entity. Used for defining schema table.

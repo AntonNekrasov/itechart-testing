@@ -1,7 +1,3 @@
-body {
-    position: static!important;
-}
-
 #rp-header {
     overflow: hidden;
 }
@@ -124,6 +120,18 @@ body {
 #rp-admin-content tfoot .rp-page-buttons {
     float: right;
 }
+#rp-admin-content tfoot .rp-page-buttons .button {
+    width: 100px;
+}
+
+#rp-admin-content .ui.form .field>label {
+    font-size: 1em!important;
+    font-weight: normal!important;
+}
+
+#rp-admin-content .ui.form .errors{
+    float: right;
+}
 
 .trash {
     transition: all .2s ease-in-out;
@@ -145,4 +153,9 @@ body {
 
 .top-left-rounded {
     border-top-left-radius: 10px!important;
+}
+
+.rp-invisible {
+    display: none;
+    visibility: hidden;
 }

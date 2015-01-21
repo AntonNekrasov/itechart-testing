@@ -67,8 +67,8 @@ object TechnologyController extends Controller {
 
     form match {
       case Success(f) => Ok(html.administration.technology.edit(f))
-      case Failure(e) => BadRequest(html.administration.technology.list())
-        .flashing(("error", Messages("error.unable.load.record") + ": " + e.getLocalizedMessage)) // todo: resolve issue with flashing, without redirecting
+      case Failure(e) =>  Redirect(admin.routes.Administration.techList()).flashing(("error",
+        Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
     }
   }
 
