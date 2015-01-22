@@ -29,7 +29,18 @@ rpApp.admin = {};
 
 rpApp.admin.controller = function() {
     var $settings = $("#settings").first(),
-        builder = rpApp.builder($settings),
+        settings = {
+            "url": {
+                "list": $settings.attr("data-list-url"),
+                "delete": $settings.attr("data-delete-url"),
+                "edit": $settings.attr("data-edit-url")
+            },
+            "deletable": true,
+            "signature": $settings.attr("data-entity-signature"),
+            "columns": columns()
+        },
+        $table = $(".rp-table").rpTable(settings),
+        //builder = rpApp.builder(settings),
         ASCENDING = "ascending",
         DESCENDING = "descending",
         DESC = 0,
@@ -67,7 +78,7 @@ rpApp.admin.controller = function() {
             situation = sit(),
             page = situation.page.current;
 
-        builder.query(page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
+        $table.rpTable("query", page, pageSize, orderBy, asc ? 0 : 1, filter, callback);
     }
 
     /**
@@ -85,7 +96,7 @@ rpApp.admin.controller = function() {
                     $loading.removeClass("loading");
                 }, self, {});
 
-            builder.query(1, pageSize, orderBy, orderDirection, $this.val(), callback);
+            $table.rpTable("query", 1, pageSize, orderBy, orderDirection, $this.val(), callback);
         }, 1000);
     }
 
@@ -109,10 +120,9 @@ rpApp.admin.controller = function() {
                     filter = situation.filter,
                     page = situation.page.current;
 
-                builder.query(page, pageSize, orderBy, orderDirection, filter);
+                $table.rpTable("query", page, pageSize, orderBy, orderDirection, filter);
             }, self, {});
-
-        builder.remove(id, name, callback);
+        $table.rpTable("remove", id, name, callback);
     }
 
     function _previous() {
@@ -121,7 +131,8 @@ rpApp.admin.controller = function() {
             orderDirection = situation.order.direction,
             filter = situation.filter,
             page = --situation.page.current;
-        if(page > 0) builder.query(page, pageSize, orderBy, orderDirection, filter);
+
+        if(page > 0) $table.rpTable("query", page, pageSize, orderBy, orderDirection, filter);
     }
 
     function _next() {
@@ -130,7 +141,8 @@ rpApp.admin.controller = function() {
             orderDirection = situation.order.direction,
             filter = situation.filter,
             page = ++situation.page.current;
-        if(page <= situation.page.total) builder.query(page, pageSize, orderBy, orderDirection, filter);
+
+        if(page <= situation.page.total) $table.rpTable("query", page, pageSize, orderBy, orderDirection, filter);
     }
 
     /**
@@ -140,7 +152,8 @@ rpApp.admin.controller = function() {
         var $this = $(this),
             id = $this.attr("data-id"),
             url = $settings.attr("data-edit-url");
-        builder.editPage(url, id);
+
+        $table.rpTable("editPage", url, id);
     }
 
     // -- Private functions
@@ -168,8 +181,33 @@ rpApp.admin.controller = function() {
         return situation;
     }
 
+    /**
+     * Prepares the list of table cells for the specific page. Requires settings tag to be defined.
+     */
+    function columns() {
+        var dataCells = $settings.attr("data-cells"),
+            SEPARATOR1 = ",",
+            SEPARATOR2 = "//",
+            result = [];
+
+        if(!dataCells) throw new Error("Table cells are not specified in template settings!");
+
+        var cellsArr = dataCells.split(SEPARATOR1);
+        for(var i = 0, lth = cellsArr.length; i < lth; i++ ) {
+            var cell = cellsArr[i].trim(),
+                sepIndex = cell.indexOf(SEPARATOR2);
+
+            result.push({
+                "name": cell.substring(0, sepIndex),
+                "title": cell.substring(sepIndex + SEPARATOR2.length),
+                "width": 0 // TODO: add handler;
+            });
+        }
+        return result;
+    }
+
     // -- Init section
 
-    builder.query(1, pageSize);
+    $table.rpTable("query", 1, pageSize);
 };
 
