@@ -22,29 +22,22 @@ object Application extends Controller {
   /**
    * Redirects to home section
    */
-  def homeSection = Action { implicit request =>
-    //TODO: update this
-    Ok("")
-  }
+  def homeSection =  TODO
+
   /**
    * Redirects to tests section
    */
-  def testsSection = Action { implicit request =>
-    //TODO: update this
-    Ok("")
-  }
+  def testsSection = TODO
+
   /**
    * Redirects to results section
    */
-  def resultsSection = Action { implicit request =>
-    //TODO: update this
-    Ok("")
-  }
+  def resultsSection = TODO
+
   /**
    * Redirects to admin section
    */
   def adminSection = Action { implicit request =>
-    //TODO: update this
     Ok(html.administration.technology.list())
   }
 

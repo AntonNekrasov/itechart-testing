@@ -34,7 +34,7 @@ rpApp.admin.controller = function() {
         DESCENDING = "descending",
         DESC = 0,
         ASC = 1,
-        pageSize = 10; //TODO: update
+        pageSize = 5; //TODO: update
 
     if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
 

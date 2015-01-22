@@ -120,7 +120,8 @@ object TechnologyController extends Controller {
   def removeTech(id: Long) = Action {
     Technology.rem(id) match {
       case Success(_) => Ok(Json.obj("status" -> ResponseStatus.Success.toString))
-      case Failure(e) => BadRequest(Json.obj("status" -> ResponseStatus.Error.toString, "error" -> e.getLocalizedMessage))
+      case Failure(e) => BadRequest(Json.obj("status" -> ResponseStatus.Error.toString,
+        "error" -> e.getLocalizedMessage))
     }
   }
 

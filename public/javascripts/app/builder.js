@@ -206,9 +206,9 @@ rpApp.builder = function ($settings) {
                     "</span>" +
                     "<span class=\"rp-pagination-empty hidden\">&nbsp;No records&nbsp;</span>" +
                     "<div class=\"rp-page-buttons ui buttons\">" +
-                        "<div class=\"ui button rp-previous\">Previous</div>" +
+                        "<div class=\"ui button disabled rp-previous\">Previous</div>" +
                         "<div class=\"or\" data-text=\"\"></div>" +
-                        "<div class=\"ui positive button rp-next\">Next</div>" +
+                        "<div class=\"ui black disabled button rp-next\">Next</div>" +
                     "</div>" +
                 "</th></tr></tfoot>";
             $table.html(content);
