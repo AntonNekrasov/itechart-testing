@@ -197,8 +197,6 @@
 
             if(!page || !pageSize) throw new Error("page or page size are undefined!");
 
-
-
             var $eltList = $("[data-action=\"list\"]");
             return $eltList.each(function() {
                 var $elt = $(this),

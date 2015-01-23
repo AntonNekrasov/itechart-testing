@@ -2,7 +2,6 @@ package models
 
 import java.sql.Timestamp
 import java.util.Calendar
-
 import org.squeryl.KeyedEntity
 import org.squeryl.PrimitiveTypeMode._
 import scala.util.Try
