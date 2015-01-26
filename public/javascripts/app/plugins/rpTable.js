@@ -36,7 +36,8 @@
 
         var content = "<thead><tr>",
             columns = settings.columns,
-            colSpan = columns.length + (settings.deletable? 1 : 0);
+            colSpan = columns.length + (settings.deletable? 1 : 0),
+            pageSize = settings.pageSize;
 
         for(var i = 0, lth = columns.length; i < lth; i++) {
             var ctt = columns[i];
@@ -46,7 +47,8 @@
         /*adding table body*/
         content += "<th></th><tbody data-action=\"list\"></tbody>";
         /*adding footer */
-        content += "<tfoot data-settings=" + JSON.stringify(settings) + "><tr data-action=\"pagination\" data-total=\"\" data-current=\"\">" +
+        content += "<tfoot data-settings=" + JSON.stringify(settings) + "><tr data-action=\"pagination\" data-total=\"\" " +
+                "data-current=\"1\" data-page-size = \"" + pageSize + "\">" +
             "<th colspan=\"" + colSpan + "\">" +
                 "<span class=\"rp-pagination-info\">" +
                     "<span>Page&nbsp;</span>" +
@@ -117,8 +119,63 @@
             page = situation.page.current,
             pageSize = situation.page.size;
 
-        methods.query.apply($table, [page, pageSize, orderBy, asc ? 0 : 1, filter, callback]);
+        _query.apply($table.get(), [page, pageSize, orderBy, asc ? 0 : 1, filter, callback]);
     }
+
+    /**
+     * Displays the paginated list of entities.
+     *
+     * @param page Current page number (starts from 0)
+     * @param pageSize Page size
+     * @param order Column to be sorted
+     * @param orderDirection Order direction
+     * @param filter Filter applied on entities
+     * @param callback Callback function, to be implemented, after server response is returned
+     */
+    function _query(page, pageSize, order, orderDirection, filter, callback) {
+
+        if(!page || !pageSize) throw new Error("page or page size are undefined!");
+
+        var $elt = $(this),
+            $tBody = $elt.find("[data-action=\"list\"]"),
+            settings = _settings($elt),
+            url = settings.url.list + "?p=" + page + "&s=" + pageSize,
+            success = new rpApp.Callback(function(params) {
+                var reply = params.reply,
+                    entities = reply.data["list"],
+                    rows = "";
+                if(reply.status === "Success") {
+                    /*writing rows*/
+                    $tBody.empty();
+                    for(var n in entities) {
+                        if (entities.hasOwnProperty(n)) {
+                            var e = entities[n];
+                            rows += _row(e, settings);
+                        }
+                    }
+
+                    $tBody.html(rows);
+                    /*updating paging*/
+                    setPaging(reply.data.page, reply.data.total, pageSize);
+                    /*updating sit*/
+                    //$elt.attr("data-page-size", pageSize);
+                    $elt.attr("data-filter", filter);
+                }
+            }, self, {}),
+            error = new rpApp.Callback(function(params) {
+                var reply = params.reply;
+                var message = reply.responseText ? reply.responseText : reply.statusText;
+                //TODO: update;
+                alert(message);
+            }, self, {});
+
+        if(order) url +="&ob=" + order;
+        if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
+        if(filter) url += "&f=" + filter;
+
+        service.send(url, "GET", {}, success, error, callback)
+    }
+
 
     /**
      * Redirects to the entity edit page
@@ -155,7 +212,7 @@
                     pageSize = situation.page.size,
                     page = situation.page.current;
 
-                $table.rpTable("query", page, pageSize, orderBy, orderDirection, filter);
+                _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
             }, self, {});
         methods.remove.apply($table, [id, name, callback]);
     }
@@ -180,7 +237,7 @@
         situation.page = {};
         situation.page.total = $pagination.attr("data-total");
         situation.page.current = $pagination.attr("data-current");
-        situation.page.size = $tag.attr("data-page-size");
+        situation.page.size = $pagination.attr("data-page-size");
 
         return situation;
     }
@@ -194,7 +251,7 @@
             filter = situation.filter,
             page = --situation.page.current;
 
-        if(page > 0) methods.query.apply($table, [page, pageSize, orderBy, orderDirection, filter]);
+        if(page > 0) _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
     }
 
     function _next() {
@@ -206,7 +263,7 @@
             filter = situation.filter,
             page = ++situation.page.current;
 
-        if(page <= situation.page.total) methods.query.apply($table, [page, pageSize, orderBy, orderDirection, filter]);
+        if(page <= situation.page.total) _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
     }
 
     /**
@@ -222,7 +279,8 @@
      * @param current is the current page
      * @param total is the total amount of pages (note: pages, not records)
      */
-    function setPaging(current, total) {
+    function setPaging(current, total, pageSize) {
+
         var $pagination = $("[data-action=\"pagination\"]"),
             $info = $(".rp-pagination-info"),
             $empty = $("rp-pagination-empty");
@@ -234,6 +292,8 @@
         if (current >= total) {
             $pagination.find(".rp-next").addClass("disabled");
         }
+
+        $pagination.attr("data-page-size", pageSize);
 
         if(total == 0) {
             $info.addClass("hidden");
@@ -302,57 +362,76 @@
         /**
          * Displays the paginated list of entities.
          *
-         * @param page Current page number (starts from 0)
-         * @param pageSize Page size
-         * @param order Column to be sorted
-         * @param orderDirection Order direction
          * @param filter Filter applied on entities
          * @param callback Callback function, to be implemented, after server response is returned
          */
-        query: function(page, pageSize, order, orderDirection, filter, callback) {
-            if(!page || !pageSize) throw new Error("page or page size are undefined!");
-            return this.each(function() {
+        list: function(filter, callback) {
+            return this.each(function(){
+                var $this = $(this),
+                    situation = sit($this),
+                    orderBy = situation.order.by,
+                    orderDirection = situation.order.direction,
+                    pageSize = situation.page.size;
 
-                var $elt = $(this),
-                    $tBody = $elt.find("[data-action=\"list\"]"),
-                    settings = _settings($elt),
-                    url = settings.url.list + "?p=" + page + "&s=" + pageSize,
-                    success = new rpApp.Callback(function(params) {
-                        var reply = params.reply,
-                            entities = reply.data["list"],
-                            rows = "";
-                        if(reply.status === "Success") {
-                            /*writing rows*/
-                            $tBody.empty();
-                            for(var n in entities) {
-                                if (entities.hasOwnProperty(n)) {
-                                    var e = entities[n];
-                                    rows += _row(e, settings);
-                                }
-                            }
-
-                            $tBody.html(rows);
-                            /*updating paging*/
-                            setPaging(reply.data.page, reply.data.total);
-                            /*updating sit*/
-                            $elt.attr("data-page-size", pageSize);
-                            $elt.attr("data-filter", filter);
-                        }
-                    }, self, {}),
-                    error = new rpApp.Callback(function(params) {
-                        var reply = params.reply;
-                        var message = reply.responseText ? reply.responseText : reply.statusText;
-                        //TODO: update;
-                        alert(message);
-                    }, self, {});
-
-                if(order) url +="&ob=" + order;
-                if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
-                if(filter) url += "&f=" + filter;
-
-                service.send(url, "GET", {}, success, error, callback)
+                _query.apply(this, [1, pageSize, orderBy, orderDirection, filter, callback]);
             });
         }
+
+        ///**
+        // * Displays the paginated list of entities.
+        // *
+        // * @param page Current page number (starts from 0)
+        // * @param pageSize Page size
+        // * @param order Column to be sorted
+        // * @param orderDirection Order direction
+        // * @param filter Filter applied on entities
+        // * @param callback Callback function, to be implemented, after server response is returned
+        // */
+        //query: function(page, pageSize, order, orderDirection, filter, callback) {
+        //
+        //    if(!page || !pageSize) throw new Error("page or page size are undefined!");
+        //    return this.each(function() {
+        //
+        //        var $elt = $(this),
+        //            $tBody = $elt.find("[data-action=\"list\"]"),
+        //            settings = _settings($elt),
+        //            url = settings.url.list + "?p=" + page + "&s=" + pageSize,
+        //            success = new rpApp.Callback(function(params) {
+        //                var reply = params.reply,
+        //                    entities = reply.data["list"],
+        //                    rows = "";
+        //                if(reply.status === "Success") {
+        //                    /*writing rows*/
+        //                    $tBody.empty();
+        //                    for(var n in entities) {
+        //                        if (entities.hasOwnProperty(n)) {
+        //                            var e = entities[n];
+        //                            rows += _row(e, settings);
+        //                        }
+        //                    }
+        //
+        //                    $tBody.html(rows);
+        //                    /*updating paging*/
+        //                    setPaging(reply.data.page, reply.data.total);
+        //                    /*updating sit*/
+        //                    $elt.attr("data-page-size", pageSize);
+        //                    $elt.attr("data-filter", filter);
+        //                }
+        //            }, self, {}),
+        //            error = new rpApp.Callback(function(params) {
+        //                var reply = params.reply;
+        //                var message = reply.responseText ? reply.responseText : reply.statusText;
+        //                //TODO: update;
+        //                alert(message);
+        //            }, self, {});
+        //
+        //        if(order) url +="&ob=" + order;
+        //        if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
+        //        if(filter) url += "&f=" + filter;
+        //
+        //        service.send(url, "GET", {}, success, error, callback)
+        //    });
+        //}
     };
 
     // -- Defaults
@@ -363,6 +442,7 @@
             "delete": "/",
             "edit": "/"
         },
+        "pageSize": 5,
         "deletable": true,
         "signature": "name",
         "columns": [

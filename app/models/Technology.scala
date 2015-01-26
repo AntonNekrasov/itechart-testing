@@ -77,13 +77,18 @@ object Technology extends BaseDAO[Technology] {
    * @param filter Filter applied on language names
    */
   def total(filter: String): Long = {
-    val lFilter = filter.toLowerCase
+    val lFilter = "%" + filter.toLowerCase + "%"
     inTransaction(
       from(AppDB.technology)(a =>
-        where(a.deleted === false and
-          a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
+        where(a.deleted === false
+          and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
           compute countDistinct(a.id)
       )
     )
   }
+
+//  def listQuery(filter: String)(f: ) = {
+//    val lFilter = "%" + filter.toLowerCase + "%"
+//    from(AppDB.technology)(a => )
+//  }
 }

@@ -33,12 +33,12 @@ rpApp.admin.controller = function() {
                 "delete": $settings.attr("data-delete-url"),
                 "edit": $settings.attr("data-edit-url")
             },
+            pageSize: 5,//TODO: generalize
             "deletable": true,
             "signature": $settings.attr("data-entity-signature"),
             "columns": columns()
         },
-        $table = $(".rp-table").rpTable(settings),
-        pageSize = 5; //TODO: update
+        $table = $(".rp-table").rpTable(settings);
 
     if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
 
@@ -56,25 +56,22 @@ rpApp.admin.controller = function() {
         clearTimeout(window["rp-search"]);
         window["rp-search"] = setTimeout(function() {
             var $loading = $this.parent().addClass("loading"),
-                //situation = sit(),
-                //orderBy = situation.order.by,
-                //orderDirection = situation.order.direction,
                 callback = new rpApp.Callback(function(){
                     $loading.removeClass("loading");
                 }, self, {});
 
             //TODO: fix this;!
-            $table.rpTable("query", 1, pageSize, orderBy, orderDirection, $this.val(), callback);
+            //$table.rpTable("query", 1, pageSize, orderBy, orderDirection, $this.val(), callback);
+            $table.rpTable("list", $this.val(), callback);
         }, 1000);
     }
 
     /**
      * Redirects to the entity create/edit page
      *
-     * @param settings are the plugin settings, containing edit url
      */
     function _create() {
-        location.href = settings.url.edit;;
+        location.href = settings.url.edit;
     }
 
     /**
@@ -104,6 +101,5 @@ rpApp.admin.controller = function() {
 
     // -- Init section
 
-    $table.rpTable("query", 1, pageSize);
+    $table.rpTable("list");
 };
-
