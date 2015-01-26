@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    var transition = "drop";
+    var transition = "drop",
+        DELAY = 8000;
     $(".rp-flash").transition(transition);
 
     $("body").on("click", ".rp-flash .close", function() {
@@ -9,8 +10,9 @@ $(document).ready(function() {
 
     window["rp-flash-delay"] = setTimeout(function(){
         $(".rp-flash").transition(transition);
-    }, 8000);
+    }, DELAY);
 
+    // -- Launches
     rpApp.admin.controller();
 });
 

@@ -159,3 +159,13 @@
     display: none;
     visibility: hidden;
 }
+
+.rp-table {
+    table-layout:fixed;
+}
+
+.rp-table td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

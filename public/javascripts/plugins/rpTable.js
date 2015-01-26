@@ -2,6 +2,7 @@
  * jQuery table plugin
  *
  * It has methods for deleting, opening, querying, sorting & ordering records
+ * param declarations are replaced with #, as at symbol is reserved by play template engine
  */
 (function( $ ) {
     "use strict";
@@ -12,17 +13,27 @@
         ASCENDING = "ascending",
         DESCENDING = "descending",
         DESC = 0,
-        ASC = 1;
+        ASC = 1,
+        ORDER_DIR = "&od=",
+        ORDER_BY = "&ob=",
+        FILTER = "&f=",
+        PAGE_SIZE = 5;
 
     // -- Init
 
+    /**
+     * jQuery table plugin declaration
+     *
+     * @param method - one of the methods, declared in methods object
+     * @param callback - callback function, to be implemented, after method is executed
+     */
     $.fn.rpTable = function( method, callback ) {
         if ( methods[method] ) {
             return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
         } else if ( typeof method === 'object' || ! method ) {
             return methods.init.apply( this, arguments );
         } else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.rpTable' );
+            $.error( "Method " +  method + " does not exist on jQuery.rpTable" );
             return null;
         }
     };
@@ -31,6 +42,9 @@
 
     /**
      * Renders table header by cell list
+     *
+     * @param $table - table jQuery object
+     * @param settings - rpTable widget settings
      */
     function render($table, settings) {
 
@@ -39,14 +53,16 @@
             colSpan = columns.length + (settings.deletable? 1 : 0),
             pageSize = settings.pageSize;
 
+        // -- Adding columns
         for(var i = 0, lth = columns.length; i < lth; i++) {
             var ctt = columns[i];
-            content += "<th data-map=\"" + ctt["name"] + "\">" + ctt["title"] + "</th>"
+            content += "<th style=\"width: " + ctt.width + "%\" data-map=\"" + ctt.name + "\">" + ctt.title + "</th>";
         }
 
-        /*adding table body*/
+        // -- Adding table body
         content += "<th></th><tbody data-action=\"list\"></tbody>";
-        /*adding footer */
+
+        // -- Adding footer
         content += "<tfoot data-settings=" + JSON.stringify(settings) + "><tr data-action=\"pagination\" data-total=\"\" " +
                 "data-current=\"1\" data-page-size = \"" + pageSize + "\">" +
             "<th colspan=\"" + colSpan + "\">" +
@@ -57,34 +73,42 @@
                     "</div>" +
                     "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
                 "</span>" +
-                "<span class=\"rp-pagination-empty hidden\">&nbsp;No records&nbsp;</span>" +
+                "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;No records&nbsp;</span>" + // TODO: translate
                 "<div class=\"rp-page-buttons ui buttons\">" +
                     "<div class=\"ui button disabled rp-previous\">Previous</div>" +
                     "<div class=\"or\" data-text=\"\"></div>" +
                     "<div class=\"ui black disabled button rp-next\">Next</div>" +
                 "</div>" +
             "</th></tr></tfoot>";
+
         $table.html(content);
     }
 
     // -- Subscription
 
+    /**
+     * Creates table row.
+     *
+     * @param tag - table tag to be subscribed on listening events
+     * @param settings - rpTable widget settings
+     */
     function subscribe(tag, settings) {
         var $tag = $(tag);
 
-        $tag.on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [settings])})
-            .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e])})
-            .on("click", "thead th", function() {_sort.apply(this, [])})
-            .on("click", ".rp-previous", function() {_previous.apply(this, [])})
-            .on("click", ".rp-next", function(){_next.apply(this, [])})
-
-
+        $tag.on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [settings]);})
+            .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e]);})
+            .on("click", "thead th", function() {_sort.apply(this, []);})
+            .on("click", ".rp-previous", function() {_previous.apply(this, []);})
+            .on("click", ".rp-next", function(){_next.apply(this, []);});
     }
 
     // -- Private functions
 
     /**
      * Creates table row.
+     *
+     * @param entity - record which contains data for the row to be created
+     * @param settings - rpTable widget settings
      */
     function _row(entity, settings) {
 
@@ -104,6 +128,7 @@
      * Handlers sorting
      */
     function _sort() {
+        /*jshint validthis:true */
         var $this = $(this),
             orderBy = $this.attr("data-map"),
             $table = $this.parents("table"),
@@ -111,13 +136,15 @@
             situation = sit($table),
             filter = situation.filter,
             asc = $this.hasClass(ASCENDING),
+            page = situation.page.current,
+            pageSize = situation.page.size,
+
+            // -- Callback
             callback = new rpApp.Callback(function() {
                 $th.removeClass("sorted").removeClass(ASCENDING).removeClass(DESCENDING);
                 $this.addClass("sorted");
                 $this.addClass((asc ? DESCENDING : ASCENDING));
-            }, self, {}),
-            page = situation.page.current,
-            pageSize = situation.page.size;
+            }, self, {});
 
         _query.apply($table.get(), [page, pageSize, orderBy, asc ? 0 : 1, filter, callback]);
     }
@@ -133,19 +160,22 @@
      * @param callback Callback function, to be implemented, after server response is returned
      */
     function _query(page, pageSize, order, orderDirection, filter, callback) {
-
+        /*jshint validthis:true */
         if(!page || !pageSize) throw new Error("page or page size are undefined!");
 
         var $elt = $(this),
             $tBody = $elt.find("[data-action=\"list\"]"),
             settings = _settings($elt),
             url = settings.url.list + "?p=" + page + "&s=" + pageSize,
+
+            // -- Success callback
             success = new rpApp.Callback(function(params) {
                 var reply = params.reply,
-                    entities = reply.data["list"],
+                    entities = reply.data.list,
                     rows = "";
                 if(reply.status === "Success") {
-                    /*writing rows*/
+
+                    // -- Writing rows
                     $tBody.empty();
                     for(var n in entities) {
                         if (entities.hasOwnProperty(n)) {
@@ -153,15 +183,17 @@
                             rows += _row(e, settings);
                         }
                     }
-
                     $tBody.html(rows);
-                    /*updating paging*/
+
+                    // -- Updating paging
                     setPaging(reply.data.page, reply.data.total, pageSize);
-                    /*updating sit*/
-                    //$elt.attr("data-page-size", pageSize);
+
+                    // -- Updating sit
                     $elt.attr("data-filter", filter);
                 }
             }, self, {}),
+
+            // -- Error callback
             error = new rpApp.Callback(function(params) {
                 var reply = params.reply;
                 var message = reply.responseText ? reply.responseText : reply.statusText;
@@ -169,11 +201,12 @@
                 alert(message);
             }, self, {});
 
-        if(order) url +="&ob=" + order;
-        if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
-        if(filter) url += "&f=" + filter;
+        // -- forming url params
+        if(order) url += ORDER_BY + order;
+        if(orderDirection || orderDirection === 0) url += ORDER_DIR + orderDirection;
+        if(filter) url += FILTER + filter;
 
-        service.send(url, "GET", {}, success, error, callback)
+        service.send(url, "GET", {}, success, error, callback);
     }
 
 
@@ -183,6 +216,7 @@
      * @param settings are the plugin settings, containing edit url
      */
     function _edit(settings) {
+        /*jshint validthis:true */
         var $this = $(this),
             id = $this.attr("data-id"),
             url = settings.url.edit;
@@ -196,6 +230,7 @@
      * @param e Event object, used for suppressing default behaviour (namely opening edit page)
      */
     function _delete(e) {
+        /*jshint validthis:true */
         e.preventDefault();
         e.stopPropagation();
 
@@ -204,6 +239,8 @@
             id = $parent.attr("data-id"),
             $table = $this.parents("table"),
             name = $parent.attr("data-entity"),
+
+            // -- Callback object
             callback = new rpApp.Callback(function() {
                 var situation = sit($table),
                     orderBy = situation.order.by,
@@ -214,11 +251,14 @@
 
                 _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
             }, self, {});
+
         methods.remove.apply($table, [id, name, callback]);
     }
 
     /**
-     * Returns current sorting/filtering/paging state
+     * Returns current sorting/filtering/paging state. E.g.  {"order":{"by":"","direction":1},"page":{"total":"","current":"1","size":"5"}}
+     *
+     * @param $tag - table jQuery object
      */
     function sit($tag) {
         var $th = $tag.find("thead th"),
@@ -229,11 +269,13 @@
         situation.filter = $tag.attr("data-filter");
         situation.order = {};
         situation.order.by = $sorted.length > 0 ? $sorted.attr("data-map") : "";
+
         if($sorted.length > 0 && $sorted.hasClass(DESCENDING)) {
             situation.order.direction = DESC;
         } else {
             situation.order.direction = ASC;
         }
+
         situation.page = {};
         situation.page.total = $pagination.attr("data-total");
         situation.page.current = $pagination.attr("data-current");
@@ -242,7 +284,11 @@
         return situation;
     }
 
+    /**
+     * Returns previous page
+     */
     function _previous() {
+        /*jshint validthis:true */
         var $table = $(this).parents("table"),
             situation = sit($table),
             orderBy = situation.order.by,
@@ -254,7 +300,11 @@
         if(page > 0) _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
     }
 
+    /**
+     * Returns next page
+     */
     function _next() {
+        /*jshint validthis:true */
         var $table = $(this).parents("table"),
             situation = sit($table),
             orderBy = situation.order.by,
@@ -268,6 +318,8 @@
 
     /**
      * Returns the list of settings
+     *
+     * @param $tag - table jQuery object, which contains settings
      */
     function _settings($tag) {
         return JSON.parse($tag.find("tfoot").first().attr("data-settings"));
@@ -276,8 +328,9 @@
     /**
      * Sets the current page, and total amount of pages, disables buttons, if there are no previous/next pages
      *
-     * @param current is the current page
-     * @param total is the total amount of pages (note: pages, not records)
+     * @param current - current page
+     * @param total - total amount of pages (note: pages, not records)
+     * @param pageSize - chosen page size
      */
     function setPaging(current, total, pageSize) {
 
@@ -295,12 +348,12 @@
 
         $pagination.attr("data-page-size", pageSize);
 
-        if(total == 0) {
-            $info.addClass("hidden");
-            $empty.removeClass("hidden");
+        if(total === 0) {
+            $info.addClass("rp-invisible");
+            $empty.removeClass("rp-invisible");
         } else {
-            $info.removeClass("hidden");
-            $empty.addClass("hidden");
+            $info.removeClass("rp-invisible");
+            $empty.addClass("rp-invisible");
             $pagination.attr("data-current", current).attr("data-total", total);
             $pagination.find("[data-value=\"total\"]").html(total);
             $pagination.find(".rp-current").val(current);
@@ -329,6 +382,10 @@
         },
         /**
          * Removes selected entity.
+         *
+         * @param id - id of the object to be deleted
+         * @param name - record name to be displayed on confirmation modal
+         * @param callback - callback object to be executed, when deletion is completed
          */
         remove: function(id, name, callback) {
             return this.each(function() {
@@ -376,82 +433,39 @@
                 _query.apply(this, [1, pageSize, orderBy, orderDirection, filter, callback]);
             });
         }
-
-        ///**
-        // * Displays the paginated list of entities.
-        // *
-        // * @param page Current page number (starts from 0)
-        // * @param pageSize Page size
-        // * @param order Column to be sorted
-        // * @param orderDirection Order direction
-        // * @param filter Filter applied on entities
-        // * @param callback Callback function, to be implemented, after server response is returned
-        // */
-        //query: function(page, pageSize, order, orderDirection, filter, callback) {
-        //
-        //    if(!page || !pageSize) throw new Error("page or page size are undefined!");
-        //    return this.each(function() {
-        //
-        //        var $elt = $(this),
-        //            $tBody = $elt.find("[data-action=\"list\"]"),
-        //            settings = _settings($elt),
-        //            url = settings.url.list + "?p=" + page + "&s=" + pageSize,
-        //            success = new rpApp.Callback(function(params) {
-        //                var reply = params.reply,
-        //                    entities = reply.data["list"],
-        //                    rows = "";
-        //                if(reply.status === "Success") {
-        //                    /*writing rows*/
-        //                    $tBody.empty();
-        //                    for(var n in entities) {
-        //                        if (entities.hasOwnProperty(n)) {
-        //                            var e = entities[n];
-        //                            rows += _row(e, settings);
-        //                        }
-        //                    }
-        //
-        //                    $tBody.html(rows);
-        //                    /*updating paging*/
-        //                    setPaging(reply.data.page, reply.data.total);
-        //                    /*updating sit*/
-        //                    $elt.attr("data-page-size", pageSize);
-        //                    $elt.attr("data-filter", filter);
-        //                }
-        //            }, self, {}),
-        //            error = new rpApp.Callback(function(params) {
-        //                var reply = params.reply;
-        //                var message = reply.responseText ? reply.responseText : reply.statusText;
-        //                //TODO: update;
-        //                alert(message);
-        //            }, self, {});
-        //
-        //        if(order) url +="&ob=" + order;
-        //        if(orderDirection || orderDirection === 0) url += "&od=" + orderDirection;
-        //        if(filter) url += "&f=" + filter;
-        //
-        //        service.send(url, "GET", {}, success, error, callback)
-        //    });
-        //}
     };
 
     // -- Defaults
 
+    /**
+     * rpTable plugin defaults, which are applied, if no setting defined
+     *
+     * url.list - url for getting data
+     * url.delete - url for deleting data by it's id
+     * url.edit - url for opening record in separate window
+     * pageSize - default page size
+     * deletable - defines, if delete column should be shown
+     * signature - defines record property to be used as "public" name
+     * columns.name - column mapping name
+     * columns.title - column title to be shown in header
+     * columns.width - column width in percent. If deletable is true, overall width shouldn't be more than 95%
+     */
     $.fn.rpTable.defaults = {
         "url": {
             "list": "/",
             "delete": "/",
             "edit": "/"
         },
-        "pageSize": 5,
+        "pageSize": PAGE_SIZE,
         "deletable": true,
         "signature": "name",
         "columns": [
             {
                 "name": "name",
                 "title": "title",
-                "width": "100%"
+                "width": "0%"
             }
         ]
-    }
+    };
 
 })( jQuery );

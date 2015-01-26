@@ -1,18 +1,42 @@
-//TODO: add docs
+/**
+ * A set of base tools for further development
+ * rpApp - is global object, which contains client side business logic
+ */
 
 var rpApp = {};
 
+/**
+ * Callback object, is function to be called after main operation happens
+ *
+ * fn - function to be executed
+ * scope - context in which function given is to be executed
+ * parameters - a set of argument passed to the function
+ */
 rpApp.Callback = function Callback(fn, scope, parameters){
     this.fn = fn;
     this.scope = scope;
     this.parameters = parameters;
 };
 
+/**
+ * Model service which sends ajax calls to web services and applies callbacks, depending on return status
+ *
+ * see send method's signature
+ */
 rpApp.Service = (function () {
-    var self = this,
-        params = {};
 
-    self.send = function(url, method, data, success, error, callback) {
+    /**
+     * Callback object, is function to be called after main operation happens
+     *
+     * @param url - url address of the web service
+     * @param method - http method type
+     * @param data - data to be send within the request
+     * @param success - callback object to be launched right after successful response is returned
+     * @param error - callback object to be launched right after error response is returned
+     * @param  callback - callback object to be launched right after response is returned, no matter successful or not
+     */
+    var send = function(url, method, data, success, error, callback) {
+        var params = {};
 
         jQuery.ajax({
             url: url,
@@ -39,8 +63,10 @@ rpApp.Service = (function () {
         });
     };
 
+    // -- Public api
+
     return {
-        send: self.send
+        send: send
     }
 })();
 

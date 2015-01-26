@@ -19,26 +19,22 @@ rpApp.admin = {};
  *    names are used for response mapping, titles are used for naming table cells
  * data-entity-signature - entity property to be used, in order to identify this within the admin
  */
-
-/**
- * TODO: refactor:
- * remove inappropriate information from controller and put it to rpTable
- */
-
 rpApp.admin.controller = function() {
     var $settings = $("#settings").first(),
+        PAGE_SIZE = 5,
         settings = {
             "url": {
                 "list": $settings.attr("data-list-url"),
                 "delete": $settings.attr("data-delete-url"),
                 "edit": $settings.attr("data-edit-url")
             },
-            pageSize: 5,//TODO: generalize
+            pageSize: PAGE_SIZE,
             "deletable": true,
             "signature": $settings.attr("data-entity-signature"),
             "columns": columns()
         },
-        $table = $(".rp-table").rpTable(settings);
+        $table = $(".rp-table").rpTable(settings),
+        DELAY = 1000;
 
     if(!$settings || $settings.length === 0) throw new Error("Unable to find settings tag in template. \n Please, define ");
 
@@ -60,10 +56,8 @@ rpApp.admin.controller = function() {
                     $loading.removeClass("loading");
                 }, self, {});
 
-            //TODO: fix this;!
-            //$table.rpTable("query", 1, pageSize, orderBy, orderDirection, $this.val(), callback);
             $table.rpTable("list", $this.val(), callback);
-        }, 1000);
+        }, DELAY);
     }
 
     /**
@@ -88,14 +82,16 @@ rpApp.admin.controller = function() {
         var cellsArr = dataCells.split(SEPARATOR1);
         for(var i = 0, lth = cellsArr.length; i < lth; i++ ) {
             var cell = cellsArr[i].trim(),
-                sepIndex = cell.indexOf(SEPARATOR2);
+                cellDetailsArr = cell.split(SEPARATOR2);
 
             result.push({
-                "name": cell.substring(0, sepIndex),
-                "title": cell.substring(sepIndex + SEPARATOR2.length),
-                "width": 0 // TODO: add handler;
+                "name": cellDetailsArr[0],
+                "title": cellDetailsArr[1],
+                "width": cellDetailsArr[2]
             });
         }
+
+        console.log(result);
         return result;
     }
 
