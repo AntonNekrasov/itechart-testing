@@ -12,6 +12,7 @@
             data-entity-signature="name">
         </div>
 
+        @* success message for flash *@
         @flash.get("success").map { message =>
             <div class="ui positive message hidden rp-flash">
                 <i class="close icon"></i>
@@ -22,6 +23,7 @@
             </div>
         }
 
+        @* error message for flash *@
         @flash.get("error").map { message =>
             <div class="ui negative message hidden rp-flash">
                 <i class="close icon"></i>
@@ -32,6 +34,7 @@
             </div>
         }
 
+        @* message for rp table plugin *@
         <div class="ui negative message hidden rp-fatal">
             <i class="close icon"></i>
             <div class="header"></div>
