@@ -28,7 +28,10 @@ rpApp.admin.controller = function() {
                 "delete": $settings.attr("data-delete-url"),
                 "edit": $settings.attr("data-edit-url")
             },
-            pageSize: PAGE_SIZE,
+            pageSize: {
+                "default": PAGE_SIZE,
+                "available": [PAGE_SIZE, PAGE_SIZE * 2, PAGE_SIZE * 5]
+            },
             "deletable": true,
             "signature": $settings.attr("data-entity-signature"),
             "columns": columns()
@@ -41,8 +44,8 @@ rpApp.admin.controller = function() {
     // -- Event subscription
 
     $("#rp-admin-content")
-        .on("click", "[data-action=\"createPage\"]", function() {_create.apply(this, [])})
-        .on("keyup", "[data-action=\"search\"]", function() {_filter.apply(this, [])});
+        .on("click", "[data-action=\"createPage\"]", function() {_create.apply(this, []);})
+        .on("keyup", "[data-action=\"search\"]", function() {_filter.apply(this, []);});
 
     /**
      * Handles filtering data
@@ -91,7 +94,6 @@ rpApp.admin.controller = function() {
             });
         }
 
-        console.log(result);
         return result;
     }
 

@@ -51,7 +51,8 @@
         var content = "<thead><tr>",
             columns = settings.columns,
             colSpan = columns.length + (settings.deletable? 1 : 0),
-            pageSize = settings.pageSize;
+            availableSizes = settings.pageSize.available,
+            pageSize = settings.pageSize.default;
 
         // -- Adding columns
         for(var i = 0, lth = columns.length; i < lth; i++) {
@@ -66,20 +67,36 @@
         content += "<tfoot data-settings=" + JSON.stringify(settings) + "><tr data-action=\"pagination\" data-total=\"\" " +
                 "data-current=\"1\" data-page-size = \"" + pageSize + "\">" +
             "<th colspan=\"" + colSpan + "\">" +
-                "<span class=\"rp-pagination-info\">" +
-                    "<span>Page&nbsp;</span>" +
-                    "<div class=\"ui transparent input\">" +
-                        "<input type=\"text\" class=\"rp-current\">" +
-                    "</div>" +
-                    "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
-                "</span>" +
-                "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;No records&nbsp;</span>" + // TODO: translate
-                "<div class=\"rp-page-buttons ui buttons\">" +
-                    "<div class=\"ui button disabled rp-previous\">Previous</div>" +
-                    "<div class=\"or\" data-text=\"\"></div>" +
-                    "<div class=\"ui black disabled button rp-next\">Next</div>" +
+
+            // -- Adding pagination info
+            "<span class=\"rp-pagination-info\">" +
+                "<span>Page&nbsp;</span>" +
+                "<div class=\"ui transparent input\">" +
+                    "<input type=\"text\" class=\"rp-current\">" +
                 "</div>" +
-            "</th></tr></tfoot>";
+                "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
+            "</span>" +
+
+            // -- Adding pagination buttons
+            "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;No records&nbsp;</span>" + // TODO: translate
+            "<div class=\"rp-page-buttons ui buttons\">" +
+                "<div class=\"ui button disabled rp-previous\">Previous</div>" +
+                "<div class=\"or\" data-text=\"\"></div>" +
+                "<div class=\"ui black disabled button rp-next\">Next</div>" +
+            "</div>" +
+
+            // -- Adding page size drop down
+            "<div class=\"ui selection dropdown right floated\">" +
+                "<input name=\"pageSize\" type=\"hidden\" value=\"" + pageSize + "\">" +
+                    "<div class=\"text\"></div>" +
+                    "<i class=\"dropdown icon\"></i>" +
+                    "<div class=\"menu\">";
+
+        for(var p = 0, lth = availableSizes.length; p < lth; p++) {
+            var sizeOption = availableSizes[p];
+            content += "<div class=\"item\" data-value=\"" + sizeOption + "\">Show by " + sizeOption + " </div>"; //TODO: translate
+        }
+        content += "</div></div></th></tr></tfoot>";
 
         $table.html(content);
     }
@@ -443,7 +460,8 @@
      * url.list - url for getting data
      * url.delete - url for deleting data by it's id
      * url.edit - url for opening record in separate window
-     * pageSize - default page size
+     * pageSize.default - default page size
+     * pageSize.available - the list of available page sizes
      * deletable - defines, if delete column should be shown
      * signature - defines record property to be used as "public" name
      * columns.name - column mapping name
@@ -456,7 +474,10 @@
             "delete": "/",
             "edit": "/"
         },
-        "pageSize": PAGE_SIZE,
+        "pageSize": {
+            "default": PAGE_SIZE,
+            "available": [PAGE_SIZE, PAGE_SIZE * 2, PAGE_SIZE * 5]
+        },
         "deletable": true,
         "signature": "name",
         "columns": [
