@@ -34,7 +34,12 @@ rpApp.admin.controller = function() {
             },
             "deletable": true,
             "signature": $settings.attr("data-entity-signature"),
-            "columns": columns()
+            "columns": columns(),
+            "errSelector": {
+                "tag": ".rp-fatal",
+                "header": ".header",
+                "message": "p"
+            }
         },
         $table = $(".rp-table").rpTable(settings),
         DELAY = 1000;

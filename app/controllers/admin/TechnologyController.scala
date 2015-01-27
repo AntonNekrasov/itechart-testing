@@ -40,19 +40,30 @@ object TechnologyController extends Controller {
    * @param filter Filter applied on language names
    */
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
-    val list = Technology.page(page, pageSize, orderBy, orderDir, filter)
-    val total = Technology.total(filter)
-    val totalPages = total / pageSize + (if(total % pageSize != 0) 1 else 0)
 
-    val result = Json.obj(
-      "data" -> Json.obj(
-        "list" -> list,
-        "total" -> totalPages,
-        "page" -> page
-      ),
-      "status" -> ResponseStatus.Success.toString
-    )
-    Ok(result).as(JSON)
+    val data = Technology.page(page, pageSize, orderBy, orderDir, filter)
+
+    data match {
+      case Failure(e) =>
+        val result = Json.obj(
+          "message" -> Messages("error.unable.load.data"),
+          "error" -> e.getLocalizedMessage,
+          "status" -> ResponseStatus.Error.toString
+        )
+        BadRequest(result).as(JSON)
+
+      case Success((list, total)) =>
+        val totalPages = total / pageSize + (if(total % pageSize != 0) 1 else 0)
+        val result = Json.obj(
+          "data" -> Json.obj(
+            "list" -> list,
+            "total" -> totalPages,
+            "page" -> page
+          ),
+          "status" -> ResponseStatus.Success.toString
+        )
+        Ok(result).as(JSON)
+    }
   }
 
   /**

@@ -4,6 +4,8 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.dsl.ast.ExpressionNode
 import play.api.libs.json.{JsObject, Json, Writes}
 
+import scala.util.Try
+
 /**
  * Testing technology
  */
@@ -51,7 +53,11 @@ object Technology extends BaseDAO[Technology] {
    * @param orderDir Order direction
    * @param filter Filter applied on language names
    */
-  def page(page: Int, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String): Seq[Technology] = {
+
+  def page(page: Int, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String): Try[(Seq[Technology], Long)] = {
+
+    val lFilter = "%" + filter.toLowerCase + "%"
+    val offSet = (page - 1) * pageSize
 
     def getOrderBy(cmp: Technology): ExpressionNode = orderBy match {
       case "name" => if(orderDir == 0) cmp.name.desc else cmp.name.asc
@@ -59,36 +65,23 @@ object Technology extends BaseDAO[Technology] {
       case _ => if(orderDir == 0) cmp.name.desc else cmp.name.asc
     }
 
-    val lFilter = "%" + filter.toLowerCase + "%"
-    val offSet = (page - 1) * pageSize
-
-    inTransaction(
+    def list = {
       from(AppDB.technology)(a =>
         where(a.deleted === false
           and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == "")) select a
           orderBy getOrderBy(a)
-      ).page(offSet, pageSize).toList
-    )
-  }
+      )
+    }
 
-  /**
-   * Returns the total amount of programming technologies.
-   *
-   * @param filter Filter applied on language names
-   */
-  def total(filter: String): Long = {
-    val lFilter = "%" + filter.toLowerCase + "%"
-    inTransaction(
-      from(AppDB.technology)(a =>
-        where(a.deleted === false
-          and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
-          compute countDistinct(a.id)
+    inTransaction(Try(
+      (list.page(offSet, pageSize).toList,
+        from(AppDB.technology)(a =>
+          where(a.deleted === false
+            and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
+            compute countDistinct(a.id)).toLong
+        )
       )
     )
   }
 
-//  def listQuery(filter: String)(f: ) = {
-//    val lFilter = "%" + filter.toLowerCase + "%"
-//    from(AppDB.technology)(a => )
-//  }
 }

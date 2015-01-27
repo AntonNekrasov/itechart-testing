@@ -19,6 +19,7 @@ error = Error
 error.unable.update.record = Unable to update record
 error.unable.create.record = Unable to create record
 error.unable.load.record = Unable to load record
+error.unable.load.data = Unable to load data
 
 # -- Successes
 success = Success

@@ -1,3 +1,5 @@
+/* globals rpApp */
+
 /**
  * jQuery table plugin
  *
@@ -17,7 +19,8 @@
         ORDER_DIR = "&od=",
         ORDER_BY = "&ob=",
         FILTER = "&f=",
-        PAGE_SIZE = 5;
+        PAGE_SIZE = 5,
+        ERR_GLOBAL = "rp-table-flash";
 
     // -- Init
 
@@ -30,7 +33,7 @@
     $.fn.rpTable = function( method, callback ) {
         if ( methods[method] ) {
             return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-        } else if ( typeof method === 'object' || ! method ) {
+        } else if ( typeof method === "object" || ! method ) {
             return methods.init.apply( this, arguments );
         } else {
             $.error( "Method " +  method + " does not exist on jQuery.rpTable" );
@@ -86,13 +89,13 @@
             "</div>" +
 
             // -- Adding page size drop down
-            "<div class=\"ui selection dropdown right floated\">" +
+            "<div class=\"ui selection dropdown rp-page-size\">" +
                 "<input name=\"pageSize\" type=\"hidden\" value=\"" + pageSize + "\">" +
                     "<div class=\"text\"></div>" +
                     "<i class=\"dropdown icon\"></i>" +
                     "<div class=\"menu\">";
 
-        for(var p = 0, lth = availableSizes.length; p < lth; p++) {
+        for(var p = 0, lth2 = availableSizes.length; p < lth2; p++) {
             var sizeOption = availableSizes[p];
             content += "<div class=\"item\" data-value=\"" + sizeOption + "\">Show by " + sizeOption + " </div>"; //TODO: translate
         }
@@ -112,14 +115,42 @@
     function subscribe(tag, settings) {
         var $tag = $(tag);
 
-        $tag.on("click", "[data-action=\"editPage\"]", function() {_edit.apply(this, [settings]);})
-            .on("click", "[data-action=\"delete\"]", function(e) {_delete.apply(this, [e]);})
-            .on("click", "thead th", function() {_sort.apply(this, []);})
-            .on("click", ".rp-previous", function() {_previous.apply(this, []);})
-            .on("click", ".rp-next", function(){_next.apply(this, []);});
+        $tag.on("click", "[data-action=\"editPage\"]", function() {
+            _edit.apply(this, [settings]);
+        }).on("click", "[data-action=\"delete\"]", function(e) {
+            _delete.apply(this, [e]);
+        }).on("click", "thead th", function() {
+            _sort.apply(this, []);
+        }).on("click", ".rp-previous", function() {
+            _previous.apply(this, []);
+        }).on("click", ".rp-next", function(){
+            _next.apply(this, []);
+        }).find(".rp-page-size").dropdown({
+            onChange: function(pageSize) {
+                if(pageSize) {
+                    _pageSize.apply(tag, [pageSize]);
+                }
+            }
+        });
+
+        $(settings.errSelector.tag).on("click", ".close", function() {
+            $(this).parents(settings.errSelector.tag).transition(rpApp.constants.messageAnimation);
+            clearTimeout(window[ERR_GLOBAL]);
+        });
     }
 
     // -- Private functions
+
+    function _pageSize(pageSize) {
+        /*jshint validthis:true */
+        var $this = $(this),
+            situation = sit($this),
+            orderBy = situation.order.by,
+            orderDirection = situation.order.direction,
+            filter = situation.filter;
+
+        _query.apply(this, [1, pageSize, orderBy, orderDirection, filter]);
+    }
 
     /**
      * Creates table row.
@@ -211,11 +242,12 @@
             }, self, {}),
 
             // -- Error callback
+
             error = new rpApp.Callback(function(params) {
                 var reply = params.reply;
-                var message = reply.responseText ? reply.responseText : reply.statusText;
-                //TODO: update;
-                alert(message);
+                var message = reply.responseJSON; //TODO: fix!
+                console.log(message);
+                _error($elt, message);
             }, self, {});
 
         // -- forming url params
@@ -333,6 +365,19 @@
         if(page <= situation.page.total) _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
     }
 
+    function _error($elt, message) {
+        var settings = _settings($elt),
+            $err = $(settings.errSelector.tag);
+
+        $err.find(settings.errSelector.header).html(message.message);
+        $err.find(settings.errSelector.message).html(message.error);
+        $err.transition(rpApp.constants.messageAnimation);
+
+        window[ERR_GLOBAL] = setTimeout(function() {
+            $err.transition(rpApp.constants.messageAnimation);
+        }, rpApp.constants.messageDuration);
+    }
+
     /**
      * Returns the list of settings
      *
@@ -353,7 +398,7 @@
 
         var $pagination = $("[data-action=\"pagination\"]"),
             $info = $(".rp-pagination-info"),
-            $empty = $("rp-pagination-empty");
+            $empty = $(".rp-pagination-empty");
 
         $pagination.find(".button").removeClass("disabled");
         if(current <= 1) {
@@ -423,10 +468,10 @@
                             }
                         }, self, {}),
                         error = new rpApp.Callback(function(params){
-                            var reply = params.reply;
-                            var message = reply.responseText ? reply.responseText : reply.statusText;
-                            //TODO: update;
-                            alert(message);
+                            var reply = params.reply,
+                                message = reply.responseJSON,//todo: fix;
+                                $table = $elt.parents("table");
+                            _error($table, message);
                         }, self, {});
 
                     service.send(url, "DELETE", {}, success, error, callback);
@@ -480,6 +525,11 @@
         },
         "deletable": true,
         "signature": "name",
+        "errSelector": {
+            "tag": "",
+            "header": "",
+            "message": ""
+        },
         "columns": [
             {
                 "name": "name",

@@ -5,6 +5,11 @@
 
 var rpApp = {};
 
+rpApp.constants = {
+    "messageDuration": 8000,
+    "messageAnimation": "drop"
+}
+
 /**
  * Callback object, is function to be called after main operation happens
  *

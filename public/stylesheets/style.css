@@ -169,3 +169,9 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.rp-table .rp-page-size.selection.dropdown {
+    padding: .7em 1em;
+    float: right;
+    margin-right: 2em;
+}

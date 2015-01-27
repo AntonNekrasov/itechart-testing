@@ -19,6 +19,7 @@ error = Произошла ошибка
 error.unable.update = Не удалось обновить запись
 error.unable.create = Не удалось добавить запись
 error.unable.load.record = Не удалось загрузить запись
+error.unable.load.data = Не удалось загрузить данные
 
 # -- Successes
 success = Операция прошла успешно

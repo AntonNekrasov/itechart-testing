@@ -80,10 +80,12 @@ trait BaseDAO[T <: Model] {
 /**
  * Base class for all the entities
  */
+//TODO: fix updated date
 abstract class Model(id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
   val deleted: Boolean = false
   val updated: Timestamp = {
     val cal = Calendar.getInstance()
     new Timestamp(cal.getTimeInMillis)
   }
+  val fail: Boolean = true
 }
