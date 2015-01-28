@@ -39,6 +39,8 @@ object TechnologyController extends Controller {
    * @param orderDir Order direction (default ASC)
    * @param filter Filter applied on language names
    */
+
+//  TODO : check create / update error messages
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
 
     val data = Technology.page(page, pageSize, orderBy, orderDir, filter)
@@ -67,20 +69,25 @@ object TechnologyController extends Controller {
   }
 
   /**
-   * Displays technology create/edit page
+   * Displays technology edit page
    *
-   * @param techId Technology ID to edit. None is returned for newly created entities
+   * @param id Technology ID to edit
    */
-  def editPage(techId: Option[Long]) = Action { implicit request =>
-    val entity: Option[Try[Technology]] = techId.map(id => Technology.getOne(id))
-    val form: Try[Form[Technology]] = entity map {v => v.map(f => techForm.fill(f))
-    } getOrElse Success(techForm)
+  def editPage(id: Long) = Action { implicit request =>
+    val entity: Try[Technology] = Technology.getOne(id)
 
-    form match {
-      case Success(f) => Ok(html.administration.technology.edit(f))
-      case Failure(e) =>  Redirect(admin.routes.Administration.techList()).flashing(("error",
+    entity match {
+      case Success(t) => Ok(html.administration.technology.edit(Some(id))(techForm.fill(t)))
+      case Failure(e) => Redirect(admin.routes.Administration.techList()).flashing(("error",
         Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
     }
+  }
+
+  /**
+   * Displays technology create page
+   */
+  def createPage = Action { implicit request =>
+    Ok(html.administration.technology.edit(None)(techForm))
   }
 
   /**
@@ -88,14 +95,14 @@ object TechnologyController extends Controller {
    */
   def createTech = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(html.administration.technology.edit(errors)),
+      errors => BadRequest(html.administration.technology.edit(None)(errors)),
       tech => {
         Technology.add(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
             Messages("success.created.record")))
           case Failure(e) =>
             Logger.error("Unable to create record", e)
-            Redirect(admin.routes.TechnologyController.editPage()).flashing(("error",
+            Redirect(admin.routes.TechnologyController.createPage()).flashing(("error",
               Messages("error.unable.create.record") + ": " + e.getLocalizedMessage))
         }
       }
@@ -109,14 +116,14 @@ object TechnologyController extends Controller {
    */
   def updateTech(id: Long) = Action { implicit request =>
     techForm.bindFromRequest.fold(
-      errors => BadRequest(html.administration.technology.edit(errors)),
+      errors => BadRequest(html.administration.technology.edit(Some(id))(errors)),
       tech => {
         Technology.put(tech) match {
           case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
             Messages("success.updated.record")))
           case Failure(e) =>
             Logger.error("Unable to update record", e)
-            Redirect(admin.routes.TechnologyController.editPage(Some(id))).flashing(("error",
+            Redirect(admin.routes.TechnologyController.editPage(id)).flashing(("error",
               Messages("error.unable.update.record") + ": " + e.getLocalizedMessage))
         }
       }

@@ -159,7 +159,6 @@
      * @param settings - rpTable widget settings
      */
     function _row(entity, settings) {
-
         var signature = settings.signature,
             content = "<tr data-action=\"editPage\" data-id=\"" + entity.id + "\" data-entity=\"" + entity[signature] + "\">",
             columns = settings.columns;
@@ -270,7 +269,7 @@
             id = $this.attr("data-id"),
             url = settings.url.edit;
 
-        location.href = id? url + "?id=" + id : url;
+        location.href = id? url + id : url;
     }
 
     /**

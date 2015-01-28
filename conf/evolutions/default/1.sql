@@ -9,7 +9,7 @@ create table technology (
   name                      varchar(255) not null,
   description               varchar(512) default '',
   deleted                   boolean not null default false,
-  updated                   timestamp not null default GETDATE(),
+  updated                   datetime not null default NOW(),
   constraint pk_technology primary key (id))
 ;
 

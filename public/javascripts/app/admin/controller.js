@@ -8,6 +8,7 @@ rpApp.admin = {};
  *     data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
  *     data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
  *     data-edit-url="@controllers.admin.routes.TechnologyController.editPage()"
+ *     data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
  *     data-cells="name//Name, description//Description"
  *     data-entity-signature="name">
  * </div>
@@ -19,14 +20,14 @@ rpApp.admin = {};
  *    names are used for response mapping, titles are used for naming table cells
  * data-entity-signature - entity property to be used, in order to identify this within the admin
  */
-rpApp.admin.controller = function() {
+(rpApp.admin.controller = function() {
     var $settings = $("#settings").first(),
         PAGE_SIZE = 5,
         settings = {
             "url": {
                 "list": $settings.attr("data-list-url"),
                 "delete": $settings.attr("data-delete-url"),
-                "edit": $settings.attr("data-edit-url")
+                "edit": $settings.attr("data-edit-url"),
             },
             pageSize: {
                 "default": PAGE_SIZE,
@@ -73,7 +74,7 @@ rpApp.admin.controller = function() {
      *
      */
     function _create() {
-        location.href = settings.url.edit;
+        location.href = $settings.attr("data-create-url");
     }
 
     /**
@@ -105,4 +106,4 @@ rpApp.admin.controller = function() {
     // -- Init section
 
     $table.rpTable("list");
-};
+})();

@@ -7,7 +7,8 @@
         <div class="hidden" id="settings"
             data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
             data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
-            data-edit-url="@controllers.admin.routes.TechnologyController.editPage()"
+            data-edit-url="@controllers.admin.routes.TechnologyController.editPage(0).url.dropRight(1)"
+            data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
             data-cells="name//Name//10, description//Description//85"
             data-entity-signature="name">
         </div>

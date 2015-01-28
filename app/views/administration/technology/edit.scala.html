@@ -1,4 +1,4 @@
-@(techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
+@(id: Option[Long])(techForm: Form[Technology])(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
 
 @import administration._
 @import enums.AdminSection
@@ -6,12 +6,12 @@
 @import views.rpHelpers._
 
 @isNew = @{
-    techForm.value.map(_.id).isEmpty
+    id.isEmpty
 }
 
 @url() = @{
     if(isNew) controllers.admin.routes.TechnologyController.createTech()
-    else controllers.admin.routes.TechnologyController.updateTech(techForm.value.flatMap(_.id).get)
+    else controllers.admin.routes.TechnologyController.updateTech(id.get)
 }
 
 @home(AdminSection.Technology, if(isNew) "Create New Technology" else "Update " + techForm.value.map { _.name }.getOrElse("Technology")) {
@@ -32,7 +32,7 @@
             <div class="ui form">
 
                 @if(!isNew) {
-                    <input type="hidden" name="id" value="@techForm.data.get("id").get" />
+                    <input type="hidden" name="id" value="@id.get" />
                 }
 
                 @inputText(techForm("name"), '_label -> "Technology name", '_help -> "")

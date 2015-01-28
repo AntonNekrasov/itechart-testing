@@ -2,6 +2,7 @@ package models
 
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.dsl.ast.ExpressionNode
+import org.squeryl.dsl.fsm.{Conditioned, WhereState}
 import play.api.libs.json.{JsObject, Json, Writes}
 
 import scala.util.Try
@@ -13,9 +14,6 @@ case class Technology(id: Option[Long],
                       name: String,
                       description: Option[String]) extends Model(id)
 
-
-//TODO: add try monads
-//TODO: add dynamic requests
 object Technology extends BaseDAO[Technology] {
 
   def apply(): Technology = new Technology(None, "", None)
@@ -38,14 +36,14 @@ object Technology extends BaseDAO[Technology] {
       "id" -> o.id.getOrElse("").toString,
       "name" -> o.name,
       "description" -> o.description,
-      "updated" -> o.updated
+      "updated" -> o.updated//todo: fix it
     )
   }
 
   // -- Queries
 
   /**
-   * Returns paginated & ordered list of programming technologies.
+   * Returns tuple paginated & ordered list of programming technologies and total amount of records .
    *
    * @param page Current page number (starts from 0)
    * @param pageSize Current page number (starts from 0)
@@ -65,22 +63,28 @@ object Technology extends BaseDAO[Technology] {
       case _ => if(orderDir == 0) cmp.name.desc else cmp.name.asc
     }
 
+    def readConditions(a: Technology): WhereState[Conditioned] = {
+      where(a.deleted === false
+        and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
+    }
+
     def list = {
       from(AppDB.technology)(a =>
-        where(a.deleted === false
-          and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == "")) select a
+        readConditions(a) select a
           orderBy getOrderBy(a)
       )
     }
 
-    inTransaction(Try(
-      (list.page(offSet, pageSize).toList,
-        from(AppDB.technology)(a =>
-          where(a.deleted === false
-            and a.name.toLowerCase.like(lFilter).inhibitWhen(lFilter == ""))
-            compute countDistinct(a.id)).toLong
-        )
-      )
+    def total = {
+      from(AppDB.technology)(a =>
+        readConditions(a) compute countDistinct(a.id))
+    }
+
+    inTransaction(
+      for {
+        d <- Try(list.page(offSet, pageSize).toList)
+        t <- Try(total.toLong)
+      } yield (d, t)
     )
   }
 

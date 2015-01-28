@@ -10,9 +10,6 @@ $(document).ready(function() {
     window["rp-flash-delay"] = setTimeout(function(){
         $(".rp-flash").transition(rpApp.constants.messageAnimation);
     }, rpApp.constants.messageDuration);
-
-    // -- Launches
-    rpApp.admin.controller();
 });
 
 
