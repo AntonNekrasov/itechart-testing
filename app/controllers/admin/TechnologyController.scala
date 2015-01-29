@@ -6,6 +6,7 @@ import models.Technology
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation.Constraints
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
@@ -20,13 +21,17 @@ object TechnologyController extends Controller {
   /**
    * Describes the technology form
    */
-  val techForm = Form(
+  def techForm(implicit lang: play.api.i18n.Lang) = Form {
+    val maxName = 50
+    val maxDescription = 1000
+
     mapping(
       "id" -> optional(longNumber),
-      "name" -> nonEmptyText,
-      "description" -> optional(text)
+      "name" -> nonEmptyText(maxLength = maxName),
+      "description" -> optional(text(maxLength = maxDescription))
     )(Technology.apply)(Technology.unapply)
-  )
+
+  }
 
   // -- Actions
 
@@ -40,7 +45,6 @@ object TechnologyController extends Controller {
    * @param filter Filter applied on language names
    */
 
-//  TODO : check create / update error messages
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action { implicit request =>
 
     val data = Technology.page(page, pageSize, orderBy, orderDir, filter)

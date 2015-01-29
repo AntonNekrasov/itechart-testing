@@ -4,7 +4,7 @@
     <label for="@elements.id">@elements.label</label>
     <div class="input">
         @elements.input
-        <span class="errors">@elements.errors.mkString(", ")</span>
-        <span class="help">@elements.infos.mkString(", ")</span>
+        <span class="errors">@elements.errors(elements.lang).map(m => {println(m); m}).mkString(", ")</span>
+        <span class="help">@elements.infos(elements.lang).mkString(", ")</span>
     </div>
 </div>

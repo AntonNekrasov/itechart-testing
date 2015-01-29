@@ -87,5 +87,5 @@ abstract class Model(id: Option[Long] = None) extends KeyedEntity[Option[Long]] 
     val cal = Calendar.getInstance()
     new Timestamp(cal.getTimeInMillis)
   }
-  val fail: Boolean = true
+//  val fail: Boolean = true
 }

@@ -14,6 +14,10 @@ admin.center.panel.add.new = Add New
 # -- Admin / Technology
 admin.center.panel.edit.technology = Enter technology name...
 
+# -- Validations (redefined)
+error.required = This field is required
+error.maxLength = Maximum length is {0} symbols
+
 # -- Errors
 error = Error
 error.unable.update.record = Unable to update record
