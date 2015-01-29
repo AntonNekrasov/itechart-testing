@@ -1,3 +1,5 @@
+
+// todo: generalize error messaging (use triggering events and passing messages)
 $(document).ready(function() {
 
     $(".rp-flash").transition(rpApp.constants.messageAnimation);

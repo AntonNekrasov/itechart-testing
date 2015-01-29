@@ -20,7 +20,7 @@ rpApp.admin = {};
  *    names are used for response mapping, titles are used for naming table cells
  * data-entity-signature - entity property to be used, in order to identify this within the admin
  */
-(rpApp.admin.controller = function() {
+rpApp.admin.controller = (function() {
     var $settings = $("#settings").first(),
         PAGE_SIZE = 5,
         settings = {

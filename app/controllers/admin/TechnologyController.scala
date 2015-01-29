@@ -41,7 +41,7 @@ object TechnologyController extends Controller {
    */
 
 //  TODO : check create / update error messages
-  def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action {
+  def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action { implicit request =>
 
     val data = Technology.page(page, pageSize, orderBy, orderDir, filter)
 
@@ -78,8 +78,10 @@ object TechnologyController extends Controller {
 
     entity match {
       case Success(t) => Ok(html.administration.technology.edit(Some(id))(techForm.fill(t)))
-      case Failure(e) => Redirect(admin.routes.Administration.techList()).flashing(("error",
-        Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
+      case Failure(e) =>
+        Logger.error("Unable to load record", e)
+        Redirect(admin.routes.Administration.techList()).flashing(("error",
+          Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
     }
   }
 
