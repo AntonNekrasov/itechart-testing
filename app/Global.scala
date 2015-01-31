@@ -8,6 +8,7 @@ import play.api.db.DB
 /**
  * Global settings
  */
+//TODO: FIX evolutions mechanism for tests
 object Global extends GlobalSettings{
 
   /**

@@ -4,7 +4,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl.dsl.fsm.{Conditioned, WhereState}
 import play.api.libs.json.{JsObject, Json, Writes}
-
+import java.text.SimpleDateFormat
 import scala.util.Try
 
 /**
@@ -36,7 +36,7 @@ object Technology extends BaseDAO[Technology] {
       "id" -> o.id.getOrElse("").toString,
       "name" -> o.name,
       "description" -> o.description,
-      "updated" -> o.updated//todo: fix it
+      "updated" -> new SimpleDateFormat("yyyy MMM dd 'at' HH:mm:ss").format(o.updated)
     )
   }
 
