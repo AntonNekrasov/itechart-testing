@@ -15,6 +15,25 @@ import play.api.test.Helpers._
 class ModelSpec extends Specification {
   // --
 
+//  def runWithTestDatabase[T](block: => T) {
+//    val fakeApp = FakeApplication(additionalConfiguration = inMemoryDatabase())
+//
+//    running(fakeApp) {
+//      ProjectRepositoryFake.insertTestDataIfEmpty()
+//      block
+//    }
+//  }
+//
+//  class StuffTest extends FunSpec with ShouldMatchers with CommonFixtures {
+//    describe("Stuff") {
+//      it("should be found in the database") {
+//        runWithTestDatabase {       // <--- *The interesting part of this example*
+//          findStuff("bar").size must be(1);
+//        }
+//      }
+//    }
+//  }
+
   "Technology model" should {
 
     "be retrieved by id" in {
