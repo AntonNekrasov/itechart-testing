@@ -1,6 +1,8 @@
-# --- First database schema
+# -- fake data
 
 # --- !Ups
+
+# --- Technologies
 
 INSERT INTO technology (id, `name`, description) VALUES(3000, 'Java core', 'Java can reduce costs, drive innovation, and improve application services as the programming language of choice for IoT, enterprise architecture, and cloud computing.');
 INSERT INTO technology (id, `name`, description) VALUES(3001, 'Java enterprise', 'Java Platform, Enterprise Edition or Java EE is Oracle''s enterprise Java computing platform.');

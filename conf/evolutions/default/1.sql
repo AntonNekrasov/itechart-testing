@@ -2,27 +2,14 @@
 
 # --- !Ups
 
-set ignorecase true;
-
 create table technology (
   id                        bigint not null auto_increment,
   name                      varchar(56) not null,
   description               varchar(1024) default '',
   deleted                   boolean not null default false,
   updated                   datetime not null default NOW(),
-  constraint pk_technology primary key (id))
-;
-
-create sequence technology_seq start with 1000;
+  constraint pk_technology primary key (id));
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
-
 drop table if exists technology;
-
-SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists technology_seq;
-
-

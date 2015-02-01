@@ -13,53 +13,61 @@ import play.api.test.Helpers._
  */
 @RunWith(classOf[JUnitRunner])
 class ModelSpec extends Specification {
-  // --
 
-//  def runWithTestDatabase[T](block: => T) {
-//    val fakeApp = FakeApplication(additionalConfiguration = inMemoryDatabase())
-//
-//    running(fakeApp) {
-//      ProjectRepositoryFake.insertTestDataIfEmpty()
-//      block
-//    }
-//  }
-//
-//  class StuffTest extends FunSpec with ShouldMatchers with CommonFixtures {
-//    describe("Stuff") {
-//      it("should be found in the database") {
-//        runWithTestDatabase {       // <--- *The interesting part of this example*
-//          findStuff("bar").size must be(1);
-//        }
-//      }
-//    }
-//  }
+  //  -- Crud
+  val testName = "Test"
+  val testDescription = "Test Description"
 
   "Technology model" should {
 
-    "be retrieved by id" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase(name = "test"))) {
+    "be support crud operations" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
-        val technology = Technology.getOne(3000l)
+        val newName = "Test123"
+        val test = Technology(None, testName, Some(testDescription))
 
-        technology must beSuccessfulTry
+        // -- Create
 
-        technology.map(_.name must equalTo("Java core")).get
+        val _c = Technology.add(test)
+        _c must beSuccessfulTry
+        val id = _c.get.id.get
+
+        // -- Read
+
+        val _r = Technology.getOne(id)
+        _r must beSuccessfulTry
+        _r.map(_.name must equalTo(testName)).get
+
+        // -- Update
+
+        val _u = Technology.put(_r.get.copy(name = newName))
+        _u must beSuccessfulTry
+
+        // -- Delete
+
+        val _d = Technology.rem(id)
+        _d must beSuccessfulTry
 
       }
     }
 
     "support pagination" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase(name = "test"))) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
-        val page = Technology.page(1, 10, "name", 0, "")
+        val listLength = 15
+
+        (1 to listLength) map { x =>
+          val t = Technology(None, testName + x, Some(testDescription))
+          Technology.add(t)
+        }
+
+        val page = Technology.page(1, 10, "id", 0, "")
 
         page must beSuccessfulTry
-
         page.map(_._1.length must equalTo(10)).get
-
-        page.map(_._2 must equalTo(15)).get
-
+        page.map(_._2 must equalTo(listLength)).get
       }
     }
+
   }
 }
