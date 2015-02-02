@@ -9,6 +9,7 @@ import scala.util.Try
 /**
  * Defines basic CRUD operations
  */
+//TODO: make it covariant ?
 trait BaseDAO[T <: Model] {
 
   /**
