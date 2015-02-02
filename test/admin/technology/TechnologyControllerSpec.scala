@@ -9,9 +9,6 @@ import play.api.libs.json.{JsNumber, JsString}
 import play.api.test.{FakeRequest, FakeApplication}
 import play.api.test.Helpers._
 
-import scala.util.parsing.json
-import scala.util.parsing.json.JSONArray
-
 /**
  * Checks Technology controller calls.
  */
@@ -41,7 +38,7 @@ class TechnologyControllerSpec extends Specification {
         contentType(result) must beSome.which(_ == "application/json")
         contentAsJson(result) \ "status" mustEqual JsString("Success")
         contentAsJson(result) \ "data" \ "total" mustEqual JsNumber(listLength / pageSize)
-        (contentAsJson(result) \ "data" \ "list")(0) \ "name" mustEqual(JsString(list.sortBy(_.name).head.name))
+        (contentAsJson(result) \ "data" \ "list")(0) \ "name" mustEqual JsString(list.sortBy(_.name).head.name)
       }
     }
 
