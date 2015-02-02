@@ -80,7 +80,6 @@ trait BaseDAO[T <: Model] {
 /**
  * Base class for all the entities
  */
-//TODO: fix updated date
 abstract class Model(id: Option[Long] = None) extends KeyedEntity[Option[Long]] {
   val deleted: Boolean = false
   val updated: Timestamp = {

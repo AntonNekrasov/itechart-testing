@@ -6,7 +6,6 @@ import models.Technology
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.validation.Constraints
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.{Controller, Action}
