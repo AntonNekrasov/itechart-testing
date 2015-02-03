@@ -9,15 +9,18 @@ rpApp.admin = {};
  *     data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
  *     data-edit-url="@controllers.admin.routes.TechnologyController.editPage()"
  *     data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
- *     data-cells="name//Name, description//Description"
+ *     data-cells="name//Name//85, description//Description//10"
+ *     data-supplementary="updated//description//@Messages("general.name")"
  *     data-entity-signature="name">
  * </div>
  *
  * data-list-url - url for reading/sorting/filtering data
  * data-delete-url - url for deleting entity
  * data-edit-url - edit/create entity page url
- * data-cells - set of cell names/titles. Cells are divided by "," separator and names & titles are divided by "//" separator
- *    names are used for response mapping, titles are used for naming table cells
+ * data-cells - set of cell names/titles/width in percent. Cells are divided by "," separator and names, titles & widths are divided by "//" separator
+ *    names are used for response mapping, titles are used for naming table cells, and widths are used for defining cell width
+ * data-supplementary - shows supplementary information for cell specified. The first value is the data itself, the second value is
+ *    mapped cell, and the third is label (title) to be displayed
  * data-entity-signature - entity property to be used, in order to identify this within the admin
  */
 rpApp.admin.controller = (function() {
@@ -82,22 +85,53 @@ rpApp.admin.controller = (function() {
      */
     function columns() {
         var dataCells = $settings.attr("data-cells"),
+            dataSupplementaryCells = $settings.attr("data-supplementary"),
             SEPARATOR1 = ",",
             SEPARATOR2 = "//",
             result = [];
 
         if(!dataCells) throw new Error("Table cells are not specified in template settings!");
 
+        // -- getting the list of columns
         var cellsArr = dataCells.split(SEPARATOR1);
-        for(var i = 0, lth = cellsArr.length; i < lth; i++ ) {
+        for(var i = 0, lth1 = cellsArr.length; i < lth1; i++ ) {
             var cell = cellsArr[i].trim(),
                 cellDetailsArr = cell.split(SEPARATOR2);
 
             result.push({
                 "name": cellDetailsArr[0],
                 "title": cellDetailsArr[1],
-                "width": cellDetailsArr[2]
+                "width": cellDetailsArr[2],
+                "supplementary": {}
             });
+        }
+
+        // -- getting meta information (supplementary data)
+        if(dataSupplementaryCells) {
+            var supplementaryCellsArr = dataSupplementaryCells.split(SEPARATOR1);
+            for(var j = 0, lth2 = supplementaryCellsArr.length; j < lth2; j++ ) {
+                var supplementaryCell = supplementaryCellsArr[j].trim(),
+                    supplementaryDetailsArr = supplementaryCell.split(SEPARATOR2),
+                    mapped = supplementaryDetailsArr[1],
+                    matching = getMatchingColumn(mapped),
+                    supplementary = {
+                        "value": supplementaryDetailsArr[0],
+                        "title": messages(supplementaryDetailsArr[2])
+                    };
+                if(matching >= 0) {
+                    result[matching].supplementary = supplementary;
+                }
+
+            }
+        }
+
+        function getMatchingColumn(mapped) {
+            for(var k = 0, lth3 = result.length; k < lth3; k ++) {
+                if(result[k].name === mapped) {
+                    return k;
+                }
+            }
+            return -1;
         }
 
         return result;

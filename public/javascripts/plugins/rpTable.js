@@ -1,4 +1,4 @@
-/* globals rpApp */
+/* globals rpApp, messages */
 
 /**
  * jQuery table plugin
@@ -81,11 +81,11 @@
             "</span>" +
 
             // -- Adding pagination buttons
-            "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;No records&nbsp;</span>" + // TODO: translate
+            "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;" + messages("List_is_empty") + "&nbsp;</span>" +
             "<div class=\"rp-page-buttons ui buttons\">" +
-                "<div class=\"ui button disabled rp-previous\">" + Previous + "</div>" +
+                "<div class=\"ui button disabled rp-previous\">" + messages("Previous") + "</div>" +
                 "<div class=\"or\" data-text=\"\"></div>" +
-                "<div class=\"ui black disabled button rp-next\">" + Next + "</div>" +
+                "<div class=\"ui black disabled button rp-next\">" + messages("Next") + "</div>" +
             "</div>" +
 
             // -- Adding page size drop down
@@ -162,11 +162,20 @@
         var signature = settings.signature,
             content = "<tr data-action=\"editPage\" data-id=\"" + entity.id + "\" data-entity=\"" + entity[signature] + "\">",
             columns = settings.columns;
+
         for(var i = 0, lth = columns.length; i < lth; i++) {
-            var ctt = columns[i];
-            content += "<td>" + (entity[ctt.name] || " ") + "</td>";
+            var ctt = columns[i],
+                supplementary = ctt.supplementary;
+            content += "<td>" +
+                (entity[ctt.name] || " ");
+
+            if(supplementary.value) {
+                content += "<p class=\"rp-supplementary\">" + supplementary.title + ": " + entity[supplementary.value] + "</p>";
+            }
+            content += "</td>";
         }
-        content += "<td><i class=\"large trash icon doubling\" data-action=\"delete\"></i></td></tr>";
+        content += "<td>" +
+        "<i class=\"large trash icon doubling\" data-action=\"delete\"></i></td></tr>";
 
         return content;
     }
@@ -533,7 +542,8 @@
             {
                 "name": "name",
                 "title": "title",
-                "width": "0%"
+                "width": "0%",
+                "supplementary": {}
             }
         ]
     };

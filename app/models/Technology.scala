@@ -36,7 +36,7 @@ object Technology extends BaseDAO[Technology] {
       "id" -> o.id.getOrElse("").toString,
       "name" -> o.name,
       "description" -> o.description,
-      "updated" -> new SimpleDateFormat("yyyy MMM dd 'at' HH:mm:ss").format(o.updated)
+      "updated" -> new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(o.updated)
     )
   }
 

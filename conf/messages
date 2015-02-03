@@ -38,3 +38,4 @@ general.name = Name
 general.description = Description
 general.info = Info
 general.delete = Delete
+general.last.updated = Last updated
