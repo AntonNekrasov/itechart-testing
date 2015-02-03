@@ -2,14 +2,14 @@
 @import administration._
 @import enums.AdminSection
 
-@home(AdminSection.Technology, "Technology list") {
+@home(AdminSection.Technology, Messages("admin.center.panel.technology.list")) {
 
         <div class="hidden" id="settings"
             data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
             data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
             data-edit-url="@controllers.admin.routes.TechnologyController.editPage(0).url.dropRight(1)"
             data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
-            data-cells="name//Name//10, description//Description//85"
+            data-cells="name//@Messages("general.name")//10, description//@Messages("general.description")//85"
             data-entity-signature="name">
         </div>
 
@@ -43,15 +43,7 @@
         </div>
 
         @crud(Messages("admin.center.panel.edit.technology"),
-              "Lorem Ipsum",
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ligula justo, suscipit id hendrerit eu," +
-                " mattis vel nisl. In cursus aliquam euismod. Pellentesque fermentum congue nunc vel porttitor. Aenean" +
-                " bibendum auctor nisl sagittis interdum. Sed ac elit commodo, vestibulum turpis eu, tincidunt metus." +
-                " Sed accumsan lacus sit amet tortor cursus, ac vulputate nulla facilisis. Nullam semper rhoncus enim" +
-                " eget consectetur. Nam ac placerat tortor. Morbi rutrum libero egestas massa molestie blandit. " +
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet enim sit amet metus" +
-                " maximus dictum. Aliquam eget aliquet felis. Nunc gravida nec lacus ut eleifend. Maecenas consectetur" +
-                " mauris est, sed hendrerit velit ultricies et. Vivamus sed gravida magna. Mauris at accumsan urna," +
-                " a dapibus dui."
+              Messages("general.info"),
+              Messages("admin.info.panel.description")
         )
 }

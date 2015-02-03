@@ -12,7 +12,7 @@ import play.api.test.Helpers._
  * Checks database queries
  */
 @RunWith(classOf[JUnitRunner])
-class ModelSpec extends Specification {
+class TechnologyModelSpec extends Specification {
 
   //  -- Crud
   val testName = "Test"

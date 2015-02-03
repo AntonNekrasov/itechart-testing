@@ -73,19 +73,19 @@
 
             // -- Adding pagination info
             "<span class=\"rp-pagination-info\">" +
-                "<span>Page&nbsp;</span>" +
+                "<span>" + messages("Page") + "&nbsp;</span>" +
                 "<div class=\"ui transparent input\">" +
                     "<input type=\"text\" class=\"rp-current\">" +
                 "</div>" +
-                "&nbsp;of&nbsp;<span data-value=\"total\"></span>&nbsp;" +
+                "&nbsp;" + messages("of") + "&nbsp;<span data-value=\"total\"></span>&nbsp;" +
             "</span>" +
 
             // -- Adding pagination buttons
             "<span class=\"rp-pagination-empty rp-invisible\">&nbsp;No records&nbsp;</span>" + // TODO: translate
             "<div class=\"rp-page-buttons ui buttons\">" +
-                "<div class=\"ui button disabled rp-previous\">Previous</div>" +
+                "<div class=\"ui button disabled rp-previous\">" + Previous + "</div>" +
                 "<div class=\"or\" data-text=\"\"></div>" +
-                "<div class=\"ui black disabled button rp-next\">Next</div>" +
+                "<div class=\"ui black disabled button rp-next\">" + Next + "</div>" +
             "</div>" +
 
             // -- Adding page size drop down
@@ -97,7 +97,7 @@
 
         for(var p = 0, lth2 = availableSizes.length; p < lth2; p++) {
             var sizeOption = availableSizes[p];
-            content += "<div class=\"item\" data-value=\"" + sizeOption + "\">Show by " + sizeOption + " </div>"; //TODO: translate
+            content += "<div class=\"item\" data-value=\"" + sizeOption + "\">" + messages("Show_by") + " " + sizeOption + " </div>";
         }
         content += "</div></div></th></tr></tfoot>";
 

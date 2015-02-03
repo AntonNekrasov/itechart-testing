@@ -12,7 +12,12 @@ admin.left.panel.questionnaire = Questionnaire
 admin.center.panel.add.new = Создать
 
 # -- Admin / Technology
+admin.center.panel.technology.list = Список технологий
 admin.center.panel.edit.technology = Введите название технологии...
+admin.info.panel.description = Технология указывается, при создании нового вопроса. Это своеобразный тег,\
+   который можно использовать для генерации соответствующих вопросов в тесте.
+
+
 
 # -- Validations
 error.required = Это поле обязательно
@@ -25,7 +30,12 @@ error.unable.create.record = Не удалось добавить запись
 error.unable.load.record = Не удалось загрузить запись
 error.unable.load.data = Не удалось загрузить данные
 
-# -- Successes
+# -- Success
 success = Ура
 success.updated.record = Запись успешно обновлена
 success.created.record = Запись успешно добавлена
+
+general.name = Имя
+general.description = Описание
+general.info = Справка
+general.delete = Удалить

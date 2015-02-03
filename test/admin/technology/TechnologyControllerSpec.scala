@@ -123,7 +123,7 @@ class TechnologyControllerSpec extends Specification {
     }
   }
 
-  "able to remove records" in {
+  "be able to remove records" in {
     running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
       Technology.add(Technology(Some(1L), testName, Some(testDescription)))
