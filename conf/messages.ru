@@ -37,3 +37,4 @@ general.name = Имя
 general.description = Описание
 general.info = Справка
 general.delete = Удалить
+general.loading = Загрузка

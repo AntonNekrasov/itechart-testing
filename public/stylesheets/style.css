@@ -180,3 +180,25 @@
     font-size: 75%;
     color: rgba(0,0,0,.5);
 }
+
+.rp-loader {
+    visibility: hidden;
+}
+
+.rp-loader .bar {
+    -webkit-animation:slide 1s 0s ease-in-out infinite;
+    animation:slide 1s 0s ease-in-out infinite;
+}
+
+@keyframes slide {
+    0% { width:0% }
+    100% { width:100%; }
+}
+@-webkit-keyframes slide {
+    0% { width:0% }
+    100% { width:100%; }
+}
+
+
+
+
