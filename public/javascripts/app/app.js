@@ -1,23 +1,12 @@
-
-// todo: generalize error messaging (use triggering events and passing messages)
 $(document).ready(function() {
 
     var ajaxCounter = 0,
-        $loader = $("#rp-admin-content .progress");
+        $loader = $("#rp-admin-content").find(".progress");
 
-    $(".rp-flash").transition(rpApp.constants.messageAnimation);
-
-    $("body").on("click", ".rp-flash .close", function() {
-        $(this).parents(".rp-flash").transition(rpApp.constants.messageAnimation);
-        clearTimeout(window["rp-flash-delay"]);
-    });
-
-    window["rp-flash-delay"] = setTimeout(function(){
-        $(".rp-flash").transition(rpApp.constants.messageAnimation);
-    }, rpApp.constants.messageDuration);
+    // -- shows loading indicator
 
     $.ajaxSetup({
-        error : function(jqXHR, textStatus, errorThrown) {
+        error : function() {
             --ajaxCounter;
             if(!ajaxCounter) {
                 $loader.css("visibility", "hidden");
@@ -36,6 +25,36 @@ $(document).ready(function() {
             }
         }
     });
+
+}).on("rp-alert", function(event, alert) {
+
+    var id = Number.parseInt(Math.random() * 100000),
+        $flash = $("<div id=\"" + id + "\" class=\"ui " + alert.type + " message hidden rp-flash\"> " +
+            "<i class=\"close icon\"></i>" +
+            "<div class=\"header\">" +
+                alert.title +
+            "</div>" +
+            "<p>" + alert.message + "</p>" +
+        "</div>"),
+        transition = {
+            "animation": rpApp.constants.messageAnimation,
+            "onComplete": function() {
+                $flash.remove();
+            }
+        },
+        $alertContainer = $(".rp-alert-container");
+
+    $flash.on("click", ".close", function() {
+        $flash.transition(transition);
+        clearTimeout(window["rp-flash-" + id]);
+    });
+
+    $alertContainer.append($flash);
+    $flash.transition(rpApp.constants.messageAnimation);
+
+    window["rp-flash-" + id] = setTimeout(function() {
+        $flash.transition(transition);
+    }, rpApp.constants.messageDuration);
 
 });
 

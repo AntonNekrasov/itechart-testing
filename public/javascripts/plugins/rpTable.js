@@ -19,8 +19,8 @@
         ORDER_DIR = "&od=",
         ORDER_BY = "&ob=",
         FILTER = "&f=",
-        PAGE_SIZE = 5,
-        ERR_GLOBAL = "rp-table-flash";
+        PAGE_SIZE = 5;
+
 
     // -- Init
 
@@ -131,11 +131,6 @@
                     _pageSize.apply(tag, [pageSize]);
                 }
             }
-        });
-
-        $(settings.errSelector.tag).on("click", ".close", function() {
-            $(this).parents(settings.errSelector.tag).transition(rpApp.constants.messageAnimation);
-            clearTimeout(window[ERR_GLOBAL]);
         });
     }
 
@@ -253,9 +248,8 @@
 
             error = new rpApp.Callback(function(params) {
                 var reply = params.reply;
-                var message = reply.responseJSON; //TODO: fix!
-                console.log(message);
-                _error($elt, message);
+                var message = reply["responseJSON"];
+                _error(message);
             }, self, {});
 
         // -- forming url params
@@ -373,17 +367,9 @@
         if(page <= situation.page.total) _query.apply($table.get(), [page, pageSize, orderBy, orderDirection, filter]);
     }
 
-    function _error($elt, message) {
-        var settings = _settings($elt),
-            $err = $(settings.errSelector.tag);
-
-        $err.find(settings.errSelector.header).html(message.message);
-        $err.find(settings.errSelector.message).html(message.error);
-        $err.transition(rpApp.constants.messageAnimation);
-
-        window[ERR_GLOBAL] = setTimeout(function() {
-            $err.transition(rpApp.constants.messageAnimation);
-        }, rpApp.constants.messageDuration);
+    function _error(response) {
+        console.log(response);
+        $(document).trigger("rp-alert", new rpApp.Alert(response.message, response.error, "negative"));
     }
 
     /**
@@ -477,9 +463,8 @@
                         }, self, {}),
                         error = new rpApp.Callback(function(params){
                             var reply = params.reply,
-                                message = reply.responseJSON,//todo: fix;
-                                $table = $elt.parents("table");
-                            _error($table, message);
+                                message = reply["responseJSON"];
+                            _error(message);
                         }, self, {});
 
                     service.send(url, "DELETE", {}, success, error, callback);
@@ -533,11 +518,6 @@
         },
         "deletable": true,
         "signature": "name",
-        "errSelector": {
-            "tag": "",
-            "header": "",
-            "message": ""
-        },
         "columns": [
             {
                 "name": "name",

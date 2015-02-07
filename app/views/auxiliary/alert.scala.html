@@ -1,0 +1,9 @@
+@(title: String, message: String, messageType: String)(implicit request: Request[_], lang: play.api.i18n.Lang)
+
+<script type="text/javascript">
+    $(document).trigger("rp-alert", new rpApp.Alert(
+        "@title",
+        "@message",
+        "@messageType"
+    ));
+</script>

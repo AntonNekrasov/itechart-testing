@@ -5,22 +5,41 @@
 
 var rpApp = {};
 
+/**
+ * Constants
+ *
+ * messageDuration - duration of the message
+ * messageAnimation - animation effect
+ */
 rpApp.constants = {
     "messageDuration": 8000,
     "messageAnimation": "drop"
-}
+};
 
 /**
  * Callback object, is function to be called after main operation happens
  *
- * fn - function to be executed
- * scope - context in which function given is to be executed
- * parameters - a set of argument passed to the function
+ * @param fn - function to be executed
+ * @param scope - context in which function given is to be executed
+ * @param parameters - a set of argument passed to the function
  */
 rpApp.Callback = function Callback(fn, scope, parameters){
     this.fn = fn;
     this.scope = scope;
     this.parameters = parameters;
+};
+
+/**
+ * Alert object contains data, used for flashing messages
+ *
+ * @param title - the title of the alert
+ * @param message - alert message
+ * @param type - message type
+ */
+rpApp.Alert = function Alert(title, message, type) {
+    this.title = title;
+    this.message = message;
+    this.type = type;
 };
 
 /**

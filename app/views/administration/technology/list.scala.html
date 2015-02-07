@@ -1,55 +1,37 @@
 @()(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
 @import administration._
 @import enums.AdminSection
+@import auxiliary.alert
 
 @home(AdminSection.Technology, Messages("admin.center.panel.technology.list")) {
-        @*TODO: replace backend translation *@
-        @*TODO: rework error messaging*@
-        @*TODO: translate deletion, create & update *@
-        @*TODO: fix messageJson in rpTable *@
-        @*TODO: add pagination key events *@
+    @*TODO: replace backend translation *@
+    @*TODO: translate deletion, create & update *@
+    @*TODO: add pagination key events *@
 
-        <div class="hidden" id="settings"
-            data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
-            data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
-            data-edit-url="@controllers.admin.routes.TechnologyController.editPage(0).url.dropRight(1)"
-            data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
-            data-cells="name//@Messages("general.name")//10, description//@Messages("general.description")//85"
-            data-supplementary="updated//description//Last_updated"
-            data-entity-signature="name">
-        </div>
+    <div class="hidden" id="settings"
+        data-list-url="@controllers.admin.routes.TechnologyController.queryTech()"
+        data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
+        data-edit-url="@controllers.admin.routes.TechnologyController.editPage(0).url.dropRight(1)"
+        data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
+        data-cells="name//@Messages("general.name")//10, description//@Messages("general.description")//85"
+        data-supplementary="updated//description//Last_updated"
+        data-entity-signature="name">
+    </div>
 
-        @* success message for flash *@
-        @flash.get("success").map { message =>
-            <div class="ui positive message hidden rp-flash">
-                <i class="close icon"></i>
-                <div class="header">
-                    @Messages("success")
-                </div>
-                <p>@message</p>
-            </div>
-        }
+    <div class="rp-alert-container"></div>
 
-        @* error message for flash *@
-        @flash.get("error").map { message =>
-            <div class="ui negative message hidden rp-flash">
-                <i class="close icon"></i>
-                <div class="header">
-                    @Messages("error")
-                </div>
-                <p>@message</p>
-            </div>
-        }
+    @crud(Messages("admin.center.panel.edit.technology"),
+          Messages("general.info"),
+          Messages("admin.info.panel.description")
+    )
 
-        @* message for rp table plugin *@
-        <div class="ui negative message hidden rp-fatal">
-            <i class="close icon"></i>
-            <div class="header"></div>
-            <p></p>
-        </div>
+    @flash.get("success").map { message =>
+        @alert(Messages("success"), message, "positive")
+    }
 
-        @crud(Messages("admin.center.panel.edit.technology"),
-              Messages("general.info"),
-              Messages("admin.info.panel.description")
-        )
+    @flash.get("error").map { message =>
+        @alert(Messages("error"), message, "negative")
+    }
+
+
 }

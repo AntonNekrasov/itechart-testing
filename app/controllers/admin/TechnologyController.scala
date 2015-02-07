@@ -7,7 +7,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.{Controller, Action}
 import views.html
 import scala.util.{Try, Failure, Success}
@@ -84,7 +84,7 @@ object TechnologyController extends Controller {
       case Failure(e) =>
         Logger.error("Unable to load record", e)
         Redirect(admin.routes.Administration.techList()).flashing(("error",
-          Messages("error.unable.load.record") + ": " + e.getLocalizedMessage))
+          Messages("error.unable.load.record") + ": " + JsString(e.getLocalizedMessage)))
     }
   }
 
@@ -108,7 +108,7 @@ object TechnologyController extends Controller {
           case Failure(e) =>
             Logger.error("Unable to create record", e)
             Redirect(admin.routes.TechnologyController.createPage()).flashing(("error",
-              Messages("error.unable.create.record") + ": " + e.getLocalizedMessage))
+              Messages("error.unable.create.record") + ": " + JsString(e.getLocalizedMessage)))
         }
       }
     )
@@ -129,7 +129,7 @@ object TechnologyController extends Controller {
           case Failure(e) =>
             Logger.error("Unable to update record", e)
             Redirect(admin.routes.TechnologyController.editPage(id)).flashing(("error",
-              Messages("error.unable.update.record") + ": " + e.getLocalizedMessage))
+              Messages("error.unable.update.record") + ": " + JsString(e.getLocalizedMessage)))
         }
       }
     )
