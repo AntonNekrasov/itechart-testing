@@ -30,7 +30,7 @@ rpApp.admin.controller = (function() {
             "url": {
                 "list": $settings.attr("data-list-url"),
                 "delete": $settings.attr("data-delete-url"),
-                "edit": $settings.attr("data-edit-url"),
+                "edit": $settings.attr("data-edit-url")
             },
             pageSize: {
                 "default": PAGE_SIZE,

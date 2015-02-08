@@ -43,7 +43,6 @@ object TechnologyController extends Controller {
    * @param orderDir Order direction (default ASC)
    * @param filter Filter applied on language names
    */
-
   def queryTech(page: Int = 1, pageSize: Int = 10, orderBy: String, orderDir: Int, filter: String) = Action { implicit request =>
 
     val data = Technology.page(page, pageSize, orderBy, orderDir, filter)
