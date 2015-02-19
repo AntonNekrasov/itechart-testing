@@ -1,4 +1,4 @@
-function messages(prop) {
+function messages(prop, args) {
     var vocabulary = {
         "Page": "Страница",
         "of": "из",
@@ -6,7 +6,11 @@ function messages(prop) {
         "Previous": "Назад",
         "Next": "Вперед",
         "List_is_empty": "Список пуст",
-        "Last_updated": "Изменен"
+        "Last_updated": "Изменен",
+        "Description": "Описание",
+        "Name": "Имя",
+        "Delete": "Удалить",
+        "AreYouSureYouWantToDelete": "Вы уверены, что хотите удалить запись \"" + (args ? (args[0] || "") : "") + "\" ?"
     };
 
     return vocabulary[prop] || prop;

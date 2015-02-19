@@ -16,6 +16,10 @@ admin.center.panel.technology.list = Technology list
 admin.center.panel.edit.technology = Enter technology name...
 admin.info.panel.description = Technology is used for pointing out the topic of the question created.\
   It can be used as a kind of tag, used for generating appropriate question
+admin.center.panel.technology.create.new = Create New Technology
+admin.center.panel.technology.update = Update
+admin.center.panel.technology_ = Technology
+admin.center.panel.technology.name = Technology name
 
 # -- Validations (redefined)
 error.required = This field is required
@@ -34,9 +38,12 @@ success.updated.record = Record has successfully been updated
 success.created.record = Record has successfully been added
 
 # -- General
-general.name = Name
-general.description = Description
 general.info = Info
 general.delete = Delete
 general.last.updated = Last updated
+general.description = Description
 general.loading = Loading
+general.yes = Yes
+general.no = No
+general.save = Save
+general.cancel = Cancel

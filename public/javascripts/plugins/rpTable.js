@@ -60,7 +60,7 @@
         // -- Adding columns
         for(var i = 0, lth = columns.length; i < lth; i++) {
             var ctt = columns[i];
-            content += "<th style=\"width: " + ctt.width + "%\" data-map=\"" + ctt.name + "\">" + ctt.title + "</th>";
+            content += "<th style=\"width: " + ctt.width + "%\" data-map=\"" + ctt.name + "\">" + messages(ctt.title) + "</th>";
         }
 
         // -- Adding table body
@@ -449,13 +449,13 @@
                     url = _settings($elt).url.delete + id,
                     $modal = $("#rp-confirmation");
 
-                $modal.find(".header").html("Delete \"" + name + "\"");
-                $modal.find(".description").html("Are you sure you want to delete \"" + name + "\" record?");
+                $modal.find(".header").html(messages("Delete") + " \"" + name + "\"");
+                $modal.find(".description").html(messages("AreYouSureYouWantToDelete", [name]));
                 $modal.modal("show");
 
                 $modal.find(".rp-confirm").off("click").on("click", function() {
 
-                    var success = new rpApp.Callback(function(params){
+                    var success = new rpApp.Callback(function(params) {
                             var reply = params.reply;
                             if(reply.status === "Success") {
                                 $modal.modal("hide");

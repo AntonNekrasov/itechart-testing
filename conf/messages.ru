@@ -16,6 +16,10 @@ admin.center.panel.technology.list = Список технологий
 admin.center.panel.edit.technology = Введите название технологии...
 admin.info.panel.description = Технология указывается, при создании нового вопроса. Это своеобразный тег,\
    который можно использовать для генерации соответствующих вопросов в тесте.
+admin.center.panel.technology.create.new = Добавить технологию
+admin.center.panel.technology.update = Обновить
+admin.center.panel.technology_ = Технологию
+admin.center.panel.technology.name = Название технологии
 
 # -- Validations
 error.required = Это поле обязательно
@@ -33,8 +37,12 @@ success = Ура
 success.updated.record = Запись успешно обновлена
 success.created.record = Запись успешно добавлена
 
-general.name = Имя
-general.description = Описание
+# -- General
 general.info = Справка
 general.delete = Удалить
 general.loading = Загрузка
+general.description = Описание
+general.yes = Да
+general.no = Нет
+general.save = Сохранить
+general.cancel = Отмена

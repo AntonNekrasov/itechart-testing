@@ -4,7 +4,6 @@
 @import auxiliary.alert
 
 @home(AdminSection.Technology, Messages("admin.center.panel.technology.list")) {
-    @*TODO: replace backend translation *@
     @*TODO: translate deletion, create & update *@
     @*TODO: add pagination key events *@
 
@@ -13,7 +12,7 @@
         data-delete-url="@controllers.admin.routes.TechnologyController.removeTech(0).url.dropRight(1)"
         data-edit-url="@controllers.admin.routes.TechnologyController.editPage(0).url.dropRight(1)"
         data-create-url="@controllers.admin.routes.TechnologyController.createPage()"
-        data-cells="name//@Messages("general.name")//10, description//@Messages("general.description")//85"
+        data-cells="name//Name//10, description//Description//85"
         data-supplementary="updated//description//Last_updated"
         data-entity-signature="name">
     </div>

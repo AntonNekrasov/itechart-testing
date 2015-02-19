@@ -8,7 +8,7 @@ import play.api.db.DB
 /**
  * Global settings
  */
-object Global extends GlobalSettings{
+object Global extends GlobalSettings {
 
   /**
    * Checks user access per each request.

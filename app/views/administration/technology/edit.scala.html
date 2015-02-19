@@ -14,7 +14,8 @@
     else controllers.admin.routes.TechnologyController.updateTech(id.get)
 }
 
-@home(AdminSection.Technology, if(isNew) "Create New Technology" else "Update " + techForm.value.map { _.name }.getOrElse("Technology")) {
+@home(AdminSection.Technology, if(isNew) Messages("admin.center.panel.technology.create.new") else
+    Messages("admin.center.panel.technology.update") + " "  + techForm.value.map { _.name }.getOrElse(Messages("admin.center.panel.technology_"))) {
 
     @form(url) {
         <div class="ui warning form segment">
@@ -35,12 +36,12 @@
                     <input type="hidden" name="id" value="@id.get" />
                 }
 
-                @inputText(techForm("name"), '_label -> "Technology name", '_help -> "")
-                @textarea(techForm("description"), '_label -> "Description", '_help -> "")
+                @inputText(techForm("name"), '_label -> Messages("admin.center.panel.technology.name"), '_help -> "")
+                @textarea(techForm("description"), '_label -> Messages("general.description"), '_help -> "")
 
                 <div class="actions">
-                    <button type="submit" class="ui submit button">Save</button>
-                    <a href="@controllers.admin.routes.Administration.techList()" class="btn">Cancel</a>
+                    <button type="submit" class="ui submit button">@Messages("general.save")</button>
+                    <a href="@controllers.admin.routes.Administration.techList()" class="btn">@Messages("general.cancel")</a>
                 </div>
 
             </div>
