@@ -6,7 +6,7 @@ function messages(prop, args) {
         "Previous": "Previous",
         "Next": "Next",
         "List_is_empty": "List is empty",
-        "Last_updated": "Last updated",
+        "Last_updated": "Last\tupdated",
         "Description": "Description",
         "Name": "Name",
         "Delete": "Delete",
