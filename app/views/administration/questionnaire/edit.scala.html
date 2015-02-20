@@ -1,0 +1,51 @@
+@(id: Option[Long])(questForm: Form[Question])(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
+
+@import administration._
+@import enums.AdminSection
+@import helper._
+@import views.rpHelpers._
+
+@isNew = @{
+    id.isEmpty
+}
+
+@url() = @{
+    if(isNew) controllers.admin.routes.QuestionController.createQuest()
+    else controllers.admin.routes.QuestionController.updateQuest(id.get)
+}
+
+@home(AdminSection.Technology, if(isNew) Messages("admin.center.panel.technology.create.new") else
+    Messages("admin.center.panel.technology.update") + " "  + questForm.value.map { _.body }.getOrElse(Messages("admin.center.panel.technology_"))) {
+
+    @form(url) {
+        <div class="ui warning form segment">
+
+            @flash.get("error").map { message =>
+                <div class="ui negative message hidden rp-flash">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        @Messages("error")
+                    </div>
+                    <p>@message</p>
+                </div>
+            }
+
+            <div class="ui form">
+
+                @if(!isNew) {
+                    <input type="hidden" name="id" value="@id.get" />
+                }
+
+                @inputText(questForm("body"), '_label -> Messages("admin.center.panel.technology.name"), '_help -> "")
+                @* @textarea(techForm("description"), '_label -> Messages("general.description"), '_help -> "") *@
+
+                <div class="actions">
+                    <button type="submit" class="ui submit button">@Messages("general.save")</button>
+                    <a href="@controllers.admin.routes.Administration.techList()" class="btn">@Messages("general.cancel")</a>
+                </div>
+
+            </div>
+        </div>
+
+    }
+}

@@ -14,12 +14,15 @@ admin.center.panel.add.new = Создать
 # -- Admin / Technology
 admin.center.panel.technology.list = Список технологий
 admin.center.panel.edit.technology = Введите название технологии...
-admin.info.panel.description = Технология указывается, при создании нового вопроса. Это своеобразный тег,\
+admin.info.panel.technology.description = Технология указывается, при создании нового вопроса. Это своеобразный тег,\
    который можно использовать для генерации соответствующих вопросов в тесте.
 admin.center.panel.technology.create.new = Добавить технологию
 admin.center.panel.technology.update = Обновить
 admin.center.panel.technology_ = Технологию
 admin.center.panel.technology.name = Название технологии
+
+# -- Admin / Questionnaire
+admin.center.panel.questionnaire.list = Список вопросов
 
 # -- Validations
 error.required = Это поле обязательно

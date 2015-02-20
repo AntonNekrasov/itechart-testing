@@ -1,7 +1,7 @@
 @()(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
+
 @import administration._
 @import enums.AdminSection
-@import auxiliary.alert
 
 @home(AdminSection.Technology, Messages("admin.center.panel.technology.list")) {
     @*TODO: add pagination key events *@
@@ -20,16 +20,7 @@
 
     @crud(Messages("admin.center.panel.edit.technology"),
           Messages("general.info"),
-          Messages("admin.info.panel.description")
+          Messages("admin.info.panel.technology.description")
     )
-
-    @flash.get("success").map { message =>
-        @alert(Messages("success"), message, "positive")
-    }
-
-    @flash.get("error").map { message =>
-        @alert(Messages("error"), message, "negative")
-    }
-
 
 }

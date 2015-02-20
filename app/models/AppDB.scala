@@ -8,4 +8,5 @@ import org.squeryl.Schema
 
 object AppDB extends Schema {
   val technology = table[Technology]("technology")
+  val question = table[Question]("question")
 }

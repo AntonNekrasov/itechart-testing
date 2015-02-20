@@ -1,10 +1,25 @@
-@()(implicit request: Request[_], lang: play.api.i18n.Lang)
+@()(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
 
 @import administration._
 @import enums.AdminSection
 
-@home(AdminSection.Questionnaire, "Questionnaire") {
+@home(AdminSection.Questionnaire, "admin.center.panel.questionnaire.list") {
+    @* TODO : add supplementary technologies *@
+    <div class="hidden" id="settings"
+        data-list-url="@controllers.admin.routes.QuestionController.queryQuest()"
+        data-delete-url="@controllers.admin.routes.QuestionController.removeQuest(0).url.dropRight(1)"
+        data-edit-url="@controllers.admin.routes.QuestionController.editPage(0).url.dropRight(1)"
+        data-create-url="@controllers.admin.routes.QuestionController.createPage()"
+        data-cells="body//Question//90"
 
-    Questionaire
+        data-entity-signature="body">
+    </div>
+    @* data-supplementary="updated//description//Last_updated" *@
+    <div class="rp-alert-container"></div>
+
+    @crud(Messages("admin.center.panel.edit.question"),
+        Messages("general.info"),
+        Messages("admin.info.panel")
+    )
 
 }

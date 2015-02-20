@@ -1,4 +1,6 @@
-@(placeholder: String, infoHeader: String, infoDetails: String)(implicit request: Request[_], lang: play.api.i18n.Lang)
+@(placeholder: String, infoHeader: String, infoDetails: String)(implicit request: Request[_], lang: play.api.i18n.Lang, flash: Flash)
+
+@import auxiliary.alert
 
 <div class="ui ignored info icon message">
     <i class="info icon"></i>
@@ -23,4 +25,13 @@
 
     <script src="@routes.Assets.at("javascripts/plugins/rpTable.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/app/admin/controller.js")" type="text/javascript"></script>
+
+    @flash.get("success").map { message =>
+        @alert(Messages("success"), message, "positive")
+    }
+
+    @flash.get("error").map { message =>
+        @alert(Messages("error"), message, "negative")
+    }
+
 </div>

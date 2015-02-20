@@ -14,12 +14,16 @@ admin.center.panel.add.new = Add New
 # -- Admin / Technology
 admin.center.panel.technology.list = Technology list
 admin.center.panel.edit.technology = Enter technology name...
-admin.info.panel.description = Technology is used for pointing out the topic of the question created.\
+admin.info.panel.technology.description = Technology is used for pointing out the topic of the question created.\
   It can be used as a kind of tag, used for generating appropriate question
 admin.center.panel.technology.create.new = Create New Technology
 admin.center.panel.technology.update = Update
 admin.center.panel.technology_ = Technology
 admin.center.panel.technology.name = Technology name
+
+# -- Admin / Questionnaire
+admin.center.panel.questionnaire.list = Questionnaire
+admin.center.panel.edit.question = Enter technology of the question
 
 # -- Validations (redefined)
 error.required = This field is required

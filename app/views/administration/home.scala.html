@@ -16,9 +16,9 @@
             @Messages("admin.left.panel.technologies")
         </a>
 
-        <a class="item @active(AdminSection.Test)" href="@controllers.admin.routes.Administration.testList()">
-            <i class="block layout icon"></i>
-            @Messages("admin.left.panel.tests")
+        <a class="item @active(AdminSection.Questionnaire)" href="@controllers.admin.routes.Administration.questList()">
+            <i class="calendar icon"></i>
+            @Messages("admin.left.panel.questionnaire")
         </a>
 
         <a class="item @active(AdminSection.Quiz)" href="@controllers.admin.routes.Administration.quizList()">
@@ -26,10 +26,12 @@
             @Messages("admin.left.panel.quiz")
         </a>
 
-        <a class="item @active(AdminSection.Questionnaire)" href="@controllers.admin.routes.Administration.questList()">
-            <i class="calendar icon"></i>
-            @Messages("admin.left.panel.questionnaire")
+        <a class="item @active(AdminSection.Test)" href="@controllers.admin.routes.Administration.testList()">
+            <i class="block layout icon"></i>
+            @Messages("admin.left.panel.tests")
         </a>
+
+
 
     </div>
 
