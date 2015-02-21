@@ -86,21 +86,21 @@ object QuestionController extends Controller {
   }
 
   /**
-   * Displays technology create page
+   * Displays question create page
    */
   def createPage = Action { implicit request =>
     Ok(html.administration.questionnaire.edit(None)(questForm))
   }
 
   /**
-   * Stores new technology to a database
+   * Stores new question to a database
    */
   def createQuest = Action { implicit request =>
     questForm.bindFromRequest.fold(
       errors => BadRequest(html.administration.questionnaire.edit(None)(errors)),
-      tech => {
-        Question.add(tech) match {
-          case Success(v) => Redirect(admin.routes.Administration.techList()).flashing(("success",
+      question => {
+        Question.add(question) match {
+          case Success(v) => Redirect(admin.routes.Administration.questList()).flashing(("success",
             Messages("success.created.record")))
           case Failure(e) =>
             Logger.error("Unable to create record", e)
@@ -112,9 +112,9 @@ object QuestionController extends Controller {
   }
 
   /**
-   * Updates an existing technology
+   * Updates an existing question
    *
-   * @param id Technology id, used for getting appropriate record
+   * @param id Question id, used for getting appropriate record
    */
   def updateQuest(id: Long) = Action { implicit request =>
     questForm.bindFromRequest.fold(
@@ -133,9 +133,9 @@ object QuestionController extends Controller {
   }
 
   /**
-   * Removes an existing technology
+   * Removes an existing question
    *
-   * @param id Technology id. using for getting appropriate record
+   * @param id Question id. using for getting appropriate record
    */
   def removeQuest(id: Long) = Action {
     Question.rem(id) match {

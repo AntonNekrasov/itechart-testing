@@ -3,7 +3,7 @@
 @import administration._
 @import enums.AdminSection
 
-@home(AdminSection.Questionnaire, "admin.center.panel.questionnaire.list") {
+@home(AdminSection.Questionnaire, Messages("admin.center.panel.questionnaire.list")) {
     @* TODO : add supplementary technologies *@
     <div class="hidden" id="settings"
         data-list-url="@controllers.admin.routes.QuestionController.queryQuest()"
