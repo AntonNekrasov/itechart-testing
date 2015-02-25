@@ -39,7 +39,7 @@
                 @inputText(questForm("body"), '_label -> Messages("admin.center.panel.technology.name123"), '_help -> "")
 
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
+                    <input type="checkbox" name="multiple">
                     <label>Multiple variants</label>
                 </div>
 
@@ -84,6 +84,9 @@
 
             </div>
         </div>
-
+        <script type="application/javascript">
+            $(".toggle.checkbox").checkbox({onChange: function(){console.log("123")}});
+            $(".radio.checkbox").checkbox();
+        </script>
     }
 }
