@@ -1,7 +1,6 @@
 package models
 
 import java.text.SimpleDateFormat
-
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl.dsl.fsm.{Conditioned, WhereState}

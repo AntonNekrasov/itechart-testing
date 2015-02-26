@@ -37,11 +37,7 @@
                 }
 
                 @inputText(questForm("body"), '_label -> Messages("admin.center.panel.technology.name123"), '_help -> "")
-
-                <div class="ui toggle checkbox">
-                    <input type="checkbox" name="multiple">
-                    <label>Multiple variants</label>
-                </div>
+                @select(questForm("weight"), options = (1 to 5).map(i => (i.toString, i.toString)), '_label -> Messages("admin.center.panel.technology.name123"), '_help -> "" )
 
                 <div class="ui warning form segment">
                     Answers
@@ -79,14 +75,14 @@
 
                 <div class="actions">
                     <button type="submit" class="ui submit button">@Messages("general.save")</button>
-                    <a href="@controllers.admin.routes.Administration.techList()" class="btn">@Messages("general.cancel")</a>
+                    <a href="@controllers.admin.routes.Administration.questList()" class="btn">@Messages("general.cancel")</a>
                 </div>
 
             </div>
         </div>
-        <script type="application/javascript">
+@*        <script type="application/javascript">
             $(".toggle.checkbox").checkbox({onChange: function(){console.log("123")}});
             $(".radio.checkbox").checkbox();
-        </script>
+        </script> *@
     }
 }
